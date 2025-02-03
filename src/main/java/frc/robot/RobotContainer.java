@@ -19,7 +19,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
-import pabeles.concurrency.IntOperatorTask.Max;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -39,9 +38,11 @@ public class RobotContainer {
 
     private final int strafeAxis = 0;
     private final int translationAxis = 1;
+
     private final Trigger cwButton = driver.button(6);
     private final Trigger ccwButton = driver.button(5);
     private final Trigger zeroGyro = driver.button(2);
+    private final Trigger lineUp = driver.button(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
@@ -63,6 +64,8 @@ public class RobotContainer {
                     ) // Drive counterclockwise with negative X (left)
             )
         );
+
+        lineUp.toggleOnTrue(drivetrain.pathFind());
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->
