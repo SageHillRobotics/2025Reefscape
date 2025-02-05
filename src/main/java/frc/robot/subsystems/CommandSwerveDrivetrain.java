@@ -219,9 +219,9 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 ),
                 new PPHolonomicDriveController(
                     // PID constants for translation
-                    new PIDConstants(10, 0, 0),
+                    new PIDConstants(5, 0, 0),
                     // PID constants for rotation
-                    new PIDConstants(7, 0, 0)
+                    new PIDConstants(5, 0, 0)
                 ),
                 config,
                 // Assume the path needs to be flipped for Red vs Blue, this is normally the case
@@ -348,22 +348,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
 
     public Command pathFind(){
         PathConstraints constraints = new PathConstraints(
-            2.0, 4.0,
-            1.0, Units.degreesToRadians(720));
+            1.0, 1.0,
+            1.0, Units.degreesToRadians(360));
 
-        Pose2d goalPose = new Pose2d(2.94, 3.88, new Rotation2d(0.0));
-        Pose2d startPose = new Pose2d(2.6, 3.88, new Rotation2d(0.0));
+        Pose2d goalPose = new Pose2d(2.94, 4.2, Rotation2d.fromDegrees(0));
+        Pose2d startPose = new Pose2d(2.8, 4.2, Rotation2d.fromDegrees(0));
         GoalEndState endState = new GoalEndState(0.0, Rotation2d.fromDegrees(0.0));
 
         if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red){
             goalPose = FlippingUtil.flipFieldPose(goalPose);
             startPose = FlippingUtil.flipFieldPose(startPose);
-            endState = new GoalEndState(0.0, Rotation2d.fromDegrees(90.0));
+            endState = new GoalEndState(0.0, Rotation2d.fromDegrees(0.0));
         }
 
         List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-            goalPose,
-            startPose    
+            startPose,
+            goalPose    
         );
         
         PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, endState);
