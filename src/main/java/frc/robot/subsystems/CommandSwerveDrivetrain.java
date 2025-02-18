@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
-import java.util.List;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -15,11 +14,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-import com.pathplanner.lib.path.Waypoint;
-import com.pathplanner.lib.util.FlippingUtil;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -345,32 +340,46 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
     }
-
-    public Command pathFind(){
+    
+    public Command driveToPose(Pose2d pose){
         PathConstraints constraints = new PathConstraints(
-            2.0, 4.0,
-            1.0, Units.degreesToRadians(720));
+            3.0, 6.0,
+            3.0, Units.degreesToRadians(720));
 
-        Pose2d goalPose = new Pose2d(2.94, 3.88, new Rotation2d(0.0));
-        Pose2d startPose = new Pose2d(2.6, 3.88, new Rotation2d(0.0));
-        GoalEndState endState = new GoalEndState(0.0, Rotation2d.fromDegrees(0.0));
-
-        if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red){
-            goalPose = FlippingUtil.flipFieldPose(goalPose);
-            startPose = FlippingUtil.flipFieldPose(startPose);
-            endState = new GoalEndState(0.0, Rotation2d.fromDegrees(90.0));
-        }
-
-        List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
-            goalPose,
-            startPose    
-        );
-        
-        PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, endState);
-
-        return AutoBuilder.pathfindThenFollowPath(
-            path,
-            constraints
-        );
+        return AutoBuilder.pathfindToPose(
+            pose,
+            constraints,
+            0.0
+                                        );
     }
+
+
+    // public Command pathFind(){
+    //     PathConstraints constraints = new PathConstraints(
+    //         1.0, 1.0,
+    //         1.0, Units.degreesToRadians(360));
+
+    //     Pose2d goalPose = new Pose2d(2.94, 4.2, Rotation2d.fromDegrees(0));
+    //     Pose2d startPose = new Pose2d(2.8, 4.2, Rotation2d.fromDegrees(0));
+    //     GoalEndState endState = new GoalEndState(0.0, Rotation2d.fromDegrees(0.0));
+
+    //     if (DriverStation.getAlliance().isPresent() && DriverStation.getAlliance().get() == Alliance.Red){
+    //         goalPose = FlippingUtil.flipFieldPose(goalPose);
+    //         startPose = FlippingUtil.flipFieldPose(startPose);
+    //         endState = new GoalEndState(0.0, Rotation2d.fromDegrees(0.0));
+    //     }
+
+    //     List<Waypoint> waypoints = PathPlannerPath.waypointsFromPoses(
+    //         startPose,
+    //         goalPose    
+    //     );
+
+        
+    //     PathPlannerPath path = new PathPlannerPath(waypoints, constraints, null, endState);
+
+    //     return AutoBuilder.pathfindThenFollowPath(
+    //         path,
+    //         constraints
+    //     );
+    // }
 }
