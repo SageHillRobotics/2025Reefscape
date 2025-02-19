@@ -50,7 +50,10 @@ public class RobotContainer {
     private final Trigger cwButton = driver.button(6);
     private final Trigger ccwButton = driver.button(5);
     private final Trigger zeroGyro = driver.button(2);
-    private final Trigger lineUp = driver.button(1);
+
+    private final Trigger source2LineUp = driver.button(1);
+
+    private final Trigger aLineUp = driver.button(3);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   	private final SendableChooser<Command> autoChooser;
@@ -78,7 +81,8 @@ public class RobotContainer {
         );
 
         // lineUp.toggleOnTrue(drivetrain.pathFind());
-        lineUp.toggleOnTrue(new AutoAlign(drivetrain, 'A'));
+        source2LineUp.toggleOnTrue(new AutoAlign(drivetrain, "Source_2"));
+        aLineUp.toggleOnTrue(new AutoAlign(drivetrain, "A"));
 
         joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         joystick.b().whileTrue(drivetrain.applyRequest(() ->

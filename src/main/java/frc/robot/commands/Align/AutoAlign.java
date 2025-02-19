@@ -6,7 +6,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 public class AutoAlign extends SequentialCommandGroup{
     private final SetpointManager setpointManager;
-    public AutoAlign(CommandSwerveDrivetrain drivetrain, Character position){
+    public AutoAlign(CommandSwerveDrivetrain drivetrain, String position){
 
         this.setpointManager = new SetpointManager();
         addRequirements(drivetrain);

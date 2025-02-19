@@ -18,7 +18,7 @@ public class PreciseAlign extends Command {
 
     // private final Pose2d targetPose;
     private final SetpointManager setpointManager;
-    private Character targetKey;
+    private String targetKey;
     private Pose2d targetPose;
 
     private final PIDController xPID;
@@ -33,7 +33,7 @@ public class PreciseAlign extends Command {
      * @param drivetrain The swerve drivetrain subsystem.
      * @param targetPose The desired target pose.
      */
-    public PreciseAlign(CommandSwerveDrivetrain drivetrain, SetpointManager setpointManager, Character targetKey) {
+    public PreciseAlign(CommandSwerveDrivetrain drivetrain, SetpointManager setpointManager, String targetKey) {
         this.drivetrain = drivetrain;
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;

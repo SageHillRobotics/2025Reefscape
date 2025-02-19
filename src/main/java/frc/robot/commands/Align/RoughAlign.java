@@ -9,11 +9,11 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class RoughAlign extends Command{
     private final CommandSwerveDrivetrain drivetrain;
     private final SetpointManager setpointManager;
-    private final Character targetKey;
+    private final String targetKey;
     private Pose2d targetPose;
     private Command driveCommand;
 
-    public RoughAlign(CommandSwerveDrivetrain drivetrain, SetpointManager setpointManager, Character targetKey){
+    public RoughAlign(CommandSwerveDrivetrain drivetrain, SetpointManager setpointManager, String targetKey){
         this.drivetrain = drivetrain;
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
