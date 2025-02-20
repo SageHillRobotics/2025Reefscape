@@ -13,40 +13,56 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import frc.robot.Constants;
 
 public class Vision extends SubsystemBase {
-    private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025Reefscape.loadAprilTagLayoutField();
-    private PhotonCamera cam;
-    private Transform3d robotToCam;
-    private PhotonPoseEstimator photonPoseEstimator;
+    private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
+    private PhotonCamera leftCam;
+    private PhotonCamera rightCam;
+    private PhotonPoseEstimator photonPoseEstimatorLeft;
+    private PhotonPoseEstimator photonPoseEstimatorRight;
     private Matrix<N3, N1> curStdDevs;
 
 
     public Vision() {
-        cam = new PhotonCamera("cam");
-        robotToCam = new Transform3d(Constants.VisionConstants.CAM_TRANSLATION, Constants.VisionConstants.CAM_ROTATION);
-        photonPoseEstimator = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, robotToCam);
-        photonPoseEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        leftCam = new PhotonCamera("Left_Reef_Cam");
+        rightCam = new PhotonCamera("Right_Reef_Cam");
+
+        photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.LEFT_CAM_TRANSFORM);
+        photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.RIGHT_CAM_TRANSFORM);
+        photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+
     }
 
-    public Optional<EstimatedRobotPose> getEstimatedGlobalPose() {
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLeft() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var change : cam.getAllUnreadResults()) {
-            visionEst = photonPoseEstimator.update(change);
-            updateEstimationStdDevs(visionEst, change.getTargets());
+        for (var change : leftCam.getAllUnreadResults()) {
+            visionEst = photonPoseEstimatorLeft.update(change);
+            updateEstimationStdDevs(visionEst, change.getTargets(), photonPoseEstimatorLeft);
 
         }
         return visionEst;
 
     }
 
-    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseRight() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        for (var change : rightCam.getAllUnreadResults()) {
+            visionEst = photonPoseEstimatorRight.update(change);
+            updateEstimationStdDevs(visionEst, change.getTargets(), photonPoseEstimatorRight);
+
+        }
+        return visionEst;
+
+    }
+
+    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets, PhotonPoseEstimator photonPoseEstimator) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
             curStdDevs = Constants.VisionConstants.kSingleTagStdDevs;
@@ -92,13 +108,13 @@ public class Vision extends SubsystemBase {
         return curStdDevs;
     }
 
-    public List<PhotonTrackedTarget> getTargets(){
-        if (cam.getLatestResult().hasTargets()){
-                return (cam.getLatestResult().getTargets());
+    // public List<PhotonTrackedTarget> getTargets(){
+    //     if (cam.getLatestResult().hasTargets()){
+    //             return (cam.getLatestResult().getTargets());
 
-        }
-        else{
-            return null;
-        }
-    }
+    //     }
+    //     else{
+    //         return null;
+    //     }
+    // }
 }

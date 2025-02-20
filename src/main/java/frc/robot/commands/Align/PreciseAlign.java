@@ -25,8 +25,8 @@ public class PreciseAlign extends Command {
     private final PIDController yPID;
     private final PIDController thetaPID;
 
-    private static final double kXTolerance = 0.05;      // in meters
-    private static final double kYTolerance = 0.05;      // in meters
+    private static final double kXTolerance = 0.01;      // in meters
+    private static final double kYTolerance = 0.01;      // in meters
     private static final double kThetaTolerance = Math.toRadians(2);  // in radians
 
     /**
@@ -38,9 +38,9 @@ public class PreciseAlign extends Command {
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
 
-        xPID = new PIDController(1.0, 0.0, 0.1);
-        yPID = new PIDController(1.0, 0.0, 0.1);
-        thetaPID = new PIDController(1.0, 0.0, 0.1);
+        xPID = new PIDController(4.0, 0.0, 0.1);
+        yPID = new PIDController(4.0, 0.0, 0.1);
+        thetaPID = new PIDController(4.0, 0.0, 0.1);
 
         xPID.setTolerance(kXTolerance);
         yPID.setTolerance(kYTolerance);

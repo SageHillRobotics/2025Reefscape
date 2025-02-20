@@ -279,9 +279,19 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        var visionEstLeft = vision.getEstimatedGlobalPoseLeft();
+        visionEstLeft.ifPresent(
+                est -> {
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = vision.getEstimationStdDevs();
 
-        var visionEst = vision.getEstimatedGlobalPose();
-        visionEst.ifPresent(
+                    addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                }
+        );
+
+        var visionEstRight = vision.getEstimatedGlobalPoseRight();
+        visionEstRight.ifPresent(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
                     var estStdDevs = vision.getEstimationStdDevs();
@@ -343,7 +353,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     
     public Command driveToPose(Pose2d pose){
         PathConstraints constraints = new PathConstraints(
-            3.0, 6.0,
+            1.0, 1.0,
             3.0, Units.degreesToRadians(720));
         
         

@@ -23,7 +23,7 @@ public class SetpointManager {
         //Pose setpoints on the Blue alliance side, units in meters, meters, degrees
         setpoints.put("Source_2", new Pose2d(1.05, .95, Rotation2d.fromRadians(.95)));
 
-        setpoints.put("A", new Pose2d(3.2, 4.2, Rotation2d.fromDegrees(0)));
+        setpoints.put("A", new Pose2d(3.2, 4.2, Rotation2d.fromDegrees(180)));
         setpoints.put("B", new Pose2d(3.2, 3.85, Rotation2d.fromDegrees(0)));
 
         //fill in later
