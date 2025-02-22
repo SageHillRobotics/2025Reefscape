@@ -24,7 +24,10 @@ public class Vision extends SubsystemBase {
     private PhotonCamera rightCam;
     private PhotonPoseEstimator photonPoseEstimatorLeft;
     private PhotonPoseEstimator photonPoseEstimatorRight;
-    private Matrix<N3, N1> curStdDevs;
+    private Matrix<N3, N1> curStdDevsLeft;
+    private Matrix<N3, N1> curStdDevsRight;
+
+
 
 
     public Vision() {
@@ -44,7 +47,7 @@ public class Vision extends SubsystemBase {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : leftCam.getAllUnreadResults()) {
             visionEst = photonPoseEstimatorLeft.update(change);
-            updateEstimationStdDevs(visionEst, change.getTargets(), photonPoseEstimatorLeft);
+            updateEstimationStdDevsLeft(visionEst, change.getTargets());
 
         }
         return visionEst;
@@ -55,17 +58,17 @@ public class Vision extends SubsystemBase {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : rightCam.getAllUnreadResults()) {
             visionEst = photonPoseEstimatorRight.update(change);
-            updateEstimationStdDevs(visionEst, change.getTargets(), photonPoseEstimatorRight);
+            updateEstimationStdDevsRight(visionEst, change.getTargets());
 
         }
         return visionEst;
 
     }
 
-    private void updateEstimationStdDevs(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets, PhotonPoseEstimator photonPoseEstimator) {
+    private void updateEstimationStdDevsLeft(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
         if (estimatedPose.isEmpty()) {
             // No pose input. Default to single-tag std devs
-            curStdDevs = Constants.VisionConstants.kSingleTagStdDevs;
+            curStdDevsLeft = Constants.VisionConstants.kSingleTagStdDevs;
 
         } else {
             // Pose present. Start running Heuristic
@@ -75,7 +78,7 @@ public class Vision extends SubsystemBase {
 
             // Precalculation - see how many tags we found, and calculate an average-distance metric
             for (var tgt : targets) {
-                var tagPose = photonPoseEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
+                var tagPose = photonPoseEstimatorLeft.getFieldTags().getTagPose(tgt.getFiducialId());
                 if (tagPose.isEmpty()) continue;
                 numTags++;
                 avgDist +=
@@ -88,7 +91,7 @@ public class Vision extends SubsystemBase {
 
             if (numTags == 0) {
                 // No tags visible. Default to single-tag std devs
-                curStdDevs = Constants.VisionConstants.kSingleTagStdDevs;
+                curStdDevsLeft = Constants.VisionConstants.kSingleTagStdDevs;
             } else {
                 // One or more tags visible, run the full heuristic.
                 avgDist /= numTags;
@@ -98,15 +101,60 @@ public class Vision extends SubsystemBase {
                 if (numTags == 1 && avgDist > 4)
                     estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
                 else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-                curStdDevs = estStdDevs;
+                curStdDevsLeft = estStdDevs;
+            }
+        }
+    }
+
+    private void updateEstimationStdDevsRight(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            // No pose input. Default to single-tag std devs
+            curStdDevsRight = Constants.VisionConstants.kSingleTagStdDevs;
+
+        } else {
+            // Pose present. Start running Heuristic
+            var estStdDevs = Constants.VisionConstants.kSingleTagStdDevs;
+            int numTags = 0;
+            double avgDist = 0;
+
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var tgt : targets) {
+                var tagPose = photonPoseEstimatorRight.getFieldTags().getTagPose(tgt.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist +=
+                        tagPose
+                                .get()
+                                .toPose2d()
+                                .getTranslation()
+                                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+            }
+
+            if (numTags == 0) {
+                // No tags visible. Default to single-tag std devs
+                curStdDevsRight = Constants.VisionConstants.kSingleTagStdDevs;
+            } else {
+                // One or more tags visible, run the full heuristic.
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1) estStdDevs = Constants.VisionConstants.kMultiTagStdDevs;
+                // Increase std devs based on (average) distance
+                if (numTags == 1 && avgDist > 4)
+                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                curStdDevsRight = estStdDevs;
             }
         }
     }
 
     //separate later
-    public Matrix<N3, N1> getEstimationStdDevs() {
-        return curStdDevs;
+    public Matrix<N3, N1> getEstimationStdDevsLeft() {
+        return curStdDevsLeft;
     }
+    public Matrix<N3, N1> getEstimationStdDevsRight() {
+        return curStdDevsRight;
+    }
+
 
     // public List<PhotonTrackedTarget> getTargets(){
     //     if (cam.getLatestResult().hasTargets()){

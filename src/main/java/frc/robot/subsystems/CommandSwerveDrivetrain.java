@@ -283,7 +283,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         visionEstLeft.ifPresent(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = vision.getEstimationStdDevs();
+                    var estStdDevs = vision.getEstimationStdDevsLeft();
 
                     addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
@@ -294,7 +294,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         visionEstRight.ifPresent(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
-                    var estStdDevs = vision.getEstimationStdDevs();
+                    var estStdDevs = vision.getEstimationStdDevsRight();
 
                     addVisionMeasurement(
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
