@@ -4,7 +4,6 @@ import static edu.wpi.first.units.Units.Degrees;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -88,15 +87,16 @@ public class Pivot extends SubsystemBase{
         return config;
     }
 
-    private void movetoAngle(double degrees){
+    public void movetoAngle(double degrees){
         MotionMagicVoltage request = new MotionMagicVoltage(Units.degreesToRotations(degrees));
         rightPivot.setControl(request);
     }
 
-    private double getAngleDegrees(){
+    public double getAngleDegrees(){
         StatusSignal<Angle> positionSignal = pivotEncoder.getPosition();
         return positionSignal.getValue().in(Degrees);
     }
-    
+
+
 
 }

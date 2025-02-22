@@ -9,19 +9,15 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
-import edu.wpi.first.math.geometry.Rotation2d;
 
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandGenericHID;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.generated.TunerConstants;
@@ -37,8 +33,8 @@ public class RobotContainer {
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
             .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.15) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+    // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -53,7 +49,7 @@ public class RobotContainer {
     private final Trigger ccwButton = driver.button(6);
     private final Trigger zeroGyro = driver.button(7);
 
-    private final Trigger source2LineUp = button_board.button(2);
+    private final Trigger sourceLeftLineUp = button_board.button(2);
 
     private final Trigger aLineUp = driver.button(1);
 
@@ -83,7 +79,7 @@ public class RobotContainer {
         );
 
         // lineUp.toggleOnTrue(drivetrain.pathFind());
-        source2LineUp.toggleOnTrue(new AutoAlign(drivetrain, "Source_2"));
+        sourceLeftLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceLeft"));
         aLineUp.toggleOnTrue(new AutoAlign(drivetrain, "A"));
 
         // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
