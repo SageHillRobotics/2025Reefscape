@@ -41,7 +41,6 @@ public class Pivot extends SubsystemBase{
     private final double kAcceleration = 10;
     private final double kJerk = 1600;
 
-
     public Pivot(){
         leftPivot = new TalonFX(LEFT_PIVOT_CAN_ID);
         rightPivot = new TalonFX(RIGHT_PIVOT_CAN_ID);
@@ -96,7 +95,4 @@ public class Pivot extends SubsystemBase{
         StatusSignal<Angle> positionSignal = pivotEncoder.getPosition();
         return positionSignal.getValue().in(Degrees);
     }
-
-
-
 }

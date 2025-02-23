@@ -25,7 +25,7 @@ public class SetpointManager {
         setpoints.put("sourceLeft", new Pose2d(1.05, 7.1, Rotation2d.fromRadians(-.95)));
         setpoints.put("sourceRight", new Pose2d(1.05, .95, Rotation2d.fromRadians(.95)));
 
-        setpoints.put("A", new Pose2d(3.2, 4.2, Rotation2d.fromDegrees(180)));
+        setpoints.put("A", new Pose2d(3.4, 4.2, Rotation2d.fromDegrees(180)));
         setpoints.put("B", new Pose2d(3.2, 3.85, Rotation2d.fromDegrees(0)));
         setpoints.put("C", new Pose2d(3.75, 3.05, Rotation2d.fromDegrees(60)));
         setpoints.put("D", new Pose2d(4.0, 2.85, Rotation2d.fromDegrees(60)));

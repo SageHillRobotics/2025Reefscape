@@ -1,20 +1,27 @@
 package frc.robot.commands.Align;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+
+import static edu.wpi.first.units.Units.MetersPerSecond;
+
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 
 public class PreciseAlign extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+
+    private final double maxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    private final double maxAngularSpeed = 0.75;
 
     // private final Pose2d targetPose;
     private final SetpointManager setpointManager;
@@ -25,8 +32,8 @@ public class PreciseAlign extends Command {
     private final PIDController yPID;
     private final PIDController thetaPID;
 
-    private static final double kXTolerance = 0.01;      // in meters
-    private static final double kYTolerance = 0.01;      // in meters
+    private static final double kXTolerance = 0.05;      // in meters
+    private static final double kYTolerance = 0.05;      // in meters
     private static final double kThetaTolerance = Math.toRadians(2);  // in radians
 
     /**
@@ -38,9 +45,9 @@ public class PreciseAlign extends Command {
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
 
-        xPID = new PIDController(4.0, 0.0, 0.1);
-        yPID = new PIDController(4.0, 0.0, 0.1);
-        thetaPID = new PIDController(4.0, 0.0, 0.1);
+        xPID = new PIDController(3, 0.0, 0.1);
+        yPID = new PIDController(3, 0.0, 0.1);
+        thetaPID = new PIDController(3, 0.0, 0.1);
 
         xPID.setTolerance(kXTolerance);
         yPID.setTolerance(kYTolerance);
@@ -70,9 +77,14 @@ public class PreciseAlign extends Command {
         double ySpeed = yPID.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
         double thetaSpeed = thetaPID.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-        drivetrain.applyRequest(() ->
-            drive.withVelocityX(xSpeed)
-                .withVelocityY(ySpeed)
+        // drivetrain.applyRequest(() ->
+        //     drive.withVelocityX(xSpeed)
+        //         .withVelocityY(ySpeed)
+        //         .withRotationalRate(thetaSpeed)
+        // );
+        drivetrain.setControl(
+            drive.withVelocityX(-xSpeed)
+                .withVelocityY(-ySpeed)
                 .withRotationalRate(thetaSpeed)
         );
     }
@@ -83,6 +95,5 @@ public class PreciseAlign extends Command {
 
     @Override
     public void end(boolean interrupted) {
-        new InstantCommand(() -> drivetrain.applyRequest(() -> new SwerveRequest.SwerveDriveBrake())).schedule();
     }
 }

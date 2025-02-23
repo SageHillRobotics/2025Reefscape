@@ -17,6 +17,7 @@ public class RoughAlign extends Command{
         this.drivetrain = drivetrain;
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
+        addRequirements(drivetrain);
     }
 
     @Override
@@ -34,11 +35,23 @@ public class RoughAlign extends Command{
 
     @Override
     public boolean isFinished(){
-        return driveCommand.isFinished();
+        return (driveCommand.isFinished() || distance(drivetrain.getState().Pose) < 1);
     }
 
     @Override
     public void end(boolean interrupted){
         driveCommand.end(interrupted);
     }
+
+    public double distance(Pose2d pose){
+        double curX = pose.getX();
+        double curY = pose.getY();
+
+        double targetX = targetPose.getX();
+        double targetY = targetPose.getY();
+
+        return Math.sqrt((Math.pow((curX - targetX), 2) + Math.pow((curY - targetY), 2)));
+
+    }
+
 }

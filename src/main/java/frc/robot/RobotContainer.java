@@ -31,7 +31,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.15).withRotationalDeadband(MaxAngularRate * 0.15) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -39,19 +39,21 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandJoystick driver = new CommandJoystick(0);
-    private final CommandGenericHID button_board = new CommandGenericHID(1);
+    private final CommandGenericHID buttonBoard = new CommandGenericHID(1);
+    private final CommandGenericHID auxButtonBoard = new CommandGenericHID(2);
 
 
     private final int strafeAxis = 0;
     private final int translationAxis = 1;
 
-    private final Trigger cwButton = driver.button(5);
-    private final Trigger ccwButton = driver.button(6);
-    private final Trigger zeroGyro = driver.button(7);
+    private final Trigger cwButton = driver.button(6);
+    private final Trigger ccwButton = driver.button(5);
+    private final Trigger zeroGyro = driver.button(2);
 
-    private final Trigger sourceLeftLineUp = button_board.button(2);
+    private final Trigger sourceLeftLineUp = auxButtonBoard.button(1);
+    private final Trigger sourceRightLineUp = auxButtonBoard.button(2);
 
-    private final Trigger aLineUp = driver.button(1);
+    private final Trigger aLineUp = buttonBoard.button(1);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   	private final SendableChooser<Command> autoChooser;
@@ -80,6 +82,7 @@ public class RobotContainer {
 
         // lineUp.toggleOnTrue(drivetrain.pathFind());
         sourceLeftLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceLeft"));
+        sourceRightLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceRight"));
         aLineUp.toggleOnTrue(new AutoAlign(drivetrain, "A"));
 
         // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
