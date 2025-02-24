@@ -13,8 +13,10 @@ public class EndEffector extends SubsystemBase{
 
     private final DigitalInput beamBreak;
     private final int BEAM_BREAK_ID = 0;
+    
 
     private final double INTAKE_SPEED = 0.60; //60% output
+    private final double HOLD_SPEED = 0.01; //1% outpput
 
     public EndEffector(){
         indexMotor = new TalonFX(INDEX_MOTOR_CAN_ID);
@@ -27,6 +29,10 @@ public class EndEffector extends SubsystemBase{
 
     public void indexBrake(){
         indexMotor.setControl(new StaticBrake());
+    }
+
+    public void setHoldSpeed(){
+        indexMotor.setControl(new DutyCycleOut(HOLD_SPEED));
     }
 
     public boolean getBeamBreakValue(){

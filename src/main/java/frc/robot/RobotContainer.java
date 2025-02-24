@@ -54,6 +54,16 @@ public class RobotContainer {
     private final Trigger sourceRightLineUp = auxButtonBoard.button(2);
 
     private final Trigger aLineUp = buttonBoard.button(1);
+    private final Trigger bLineUp = buttonBoard.button(2);
+    private final Trigger cLineUp = buttonBoard.button(3);
+    private final Trigger dLineUp = buttonBoard.button(4);
+    private final Trigger eLineUp = buttonBoard.button(5);
+    private final Trigger fLineUp = buttonBoard.button(6);
+    private final Trigger gLineUp = buttonBoard.button(7);
+    private final Trigger hLineUp = buttonBoard.button(8);
+    private final Trigger iLineUp = buttonBoard.button(9);
+    private final Trigger jLineUp = buttonBoard.button(10);
+
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   	private final SendableChooser<Command> autoChooser;
@@ -83,7 +93,18 @@ public class RobotContainer {
         // lineUp.toggleOnTrue(drivetrain.pathFind());
         sourceLeftLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceLeft"));
         sourceRightLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceRight"));
-        aLineUp.toggleOnTrue(new AutoAlign(drivetrain, "A"));
+
+        aLineUp.whileTrue(new AutoAlign(drivetrain, "A"));
+        bLineUp.whileTrue(new AutoAlign(drivetrain, "B"));
+        cLineUp.whileTrue(new AutoAlign(drivetrain, "C"));
+        dLineUp.whileTrue(new AutoAlign(drivetrain, "D"));
+        eLineUp.whileTrue(new AutoAlign(drivetrain, "E"));
+        fLineUp.whileTrue(new AutoAlign(drivetrain, "F"));
+        gLineUp.whileTrue(new AutoAlign(drivetrain, "G"));
+        hLineUp.whileTrue(new AutoAlign(drivetrain, "H"));
+        iLineUp.whileTrue(new AutoAlign(drivetrain, "I"));
+        jLineUp.whileTrue(new AutoAlign(drivetrain, "J"));
+
 
         // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
         // joystick.b().whileTrue(drivetrain.applyRequest(() ->
