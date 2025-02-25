@@ -20,8 +20,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Align.AutoAlign;
+import frc.robot.commands.Pivot.ReefPosition;
+import frc.robot.commands.Telescope.MoveToL3;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Pivot;
+import frc.robot.subsystems.Telescope;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 
@@ -50,6 +54,9 @@ public class RobotContainer {
     private final Trigger ccwButton = driver.button(5);
     private final Trigger zeroGyro = driver.button(2);
 
+    private final Trigger pivotReefPosition = driver.button(7);
+    private final Trigger L3Position = driver.button(9);
+
     private final Trigger sourceLeftLineUp = auxButtonBoard.button(1);
     private final Trigger sourceRightLineUp = auxButtonBoard.button(2);
 
@@ -66,6 +73,9 @@ public class RobotContainer {
 
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final Pivot pivot = new Pivot();
+    public final Telescope telescope = new Telescope();
+
   	private final SendableChooser<Command> autoChooser;
 
 
@@ -119,6 +129,9 @@ public class RobotContainer {
 
         // reset the field-centric heading on left bumper press
         zeroGyro.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
+
+        pivotReefPosition.toggleOnTrue(new ReefPosition(pivot));
+        L3Position.toggleOnTrue(new MoveToL3(telescope));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
