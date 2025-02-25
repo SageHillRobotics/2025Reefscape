@@ -1,6 +1,7 @@
 package frc.robot.commands.Pivot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
 
 public class ReefPosition extends Command{
@@ -11,10 +12,10 @@ public class ReefPosition extends Command{
     }
     @Override
     public void initialize(){
-        pivot.movetoAngle(93);
+        pivot.movetoAngle(Constants.PivotConstants.reefAngleDegrees);
     }
     @Override
     public void end(boolean interrupted){
-        pivot.movetoAngle((0));
+        pivot.movetoAngle((Constants.PivotConstants.stowAngleDegrees));
     }
 }
