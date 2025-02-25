@@ -1,5 +1,8 @@
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Degrees;
+
+import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.Follower;
@@ -7,6 +10,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Telescope extends SubsystemBase{
@@ -18,6 +22,8 @@ public class Telescope extends SubsystemBase{
     private final int BACK_TELESCOPE_CAN_ID = 8;
 
     private final double CURRENT_LIMIT = 20;
+    private final double POSITION_TOLERANCE = 12; //12 degrees
+    private double setpoint;
 
     // private final double GEAR_RATIO = 4.0/1.0;
 
@@ -39,6 +45,8 @@ public class Telescope extends SubsystemBase{
 
         frontTelescope.getConfigurator().apply(configureFront(new TalonFXConfiguration()));
         backTelescope.getConfigurator().apply(configureBack(new TalonFXConfiguration()));
+
+        setpoint = 0;
 
         backTelescope.setControl(new Follower(FRONT_TELESCOPE_CAN_ID, false));
     }
@@ -78,7 +86,13 @@ public class Telescope extends SubsystemBase{
         MotionMagicVoltage request = new MotionMagicVoltage(rotations);
         frontTelescope.setControl(request);
         backTelescope.setControl(new Follower(FRONT_TELESCOPE_CAN_ID, false));
+        setpoint = rotations;
     }
-
     
+    public boolean atSetpoint(){
+        StatusSignal<Angle> posSignal = frontTelescope.getPosition();
+        double curPos = posSignal.getValue().in(Degrees);
+
+        return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
+    }
 }

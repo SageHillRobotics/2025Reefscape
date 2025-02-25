@@ -5,17 +5,17 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Pivot;
 
 public class ReefPosition extends Command{
-    private final Pivot pivot;
-    public ReefPosition(Pivot pivot){
-        this.pivot = pivot;
-        addRequirements(pivot);
+    private final Pivot m_pivot;
+    public ReefPosition(Pivot m_pivot){
+        this.m_pivot = m_pivot;
+        addRequirements(m_pivot);
     }
     @Override
     public void initialize(){
-        pivot.movetoAngle(Constants.PivotConstants.reefAngleDegrees);
+        m_pivot.movetoAngle(Constants.PivotConstants.reefAngleDegrees);
     }
-    @Override
-    public void end(boolean interrupted){
-        pivot.movetoAngle((Constants.PivotConstants.stowAngleDegrees));
-    }
+    // @Override
+    // public void end(boolean interrupted){
+    //     pivot.movetoAngle((Constants.PivotConstants.stowAngleDegrees));
+    // }
 }

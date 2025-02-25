@@ -13,8 +13,8 @@ public class MoveToL3 extends Command{
     public void initialize(){
         m_telescope.movetoPosition(12.28);
     }
-    @Override
-    public void end(boolean interrupted){
-        m_telescope.movetoPosition(1);
-    }
+    // @Override
+    // public void end(boolean interrupted){
+    //     m_telescope.movetoPosition(1);
+    // }
 }

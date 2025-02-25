@@ -45,6 +45,9 @@ public class Pivot extends SubsystemBase{
 
     private final double CURRENT_LIMIT = 20;
 
+    private double setpoint;
+    private final double POSITION_TOLERANCE = 0.3; //0.3 degrees
+
     public Pivot(){
         rightPivot = new TalonFX(RIGHT_PIVOT_CAN_ID);
         leftPivot = new TalonFX(LEFT_PIVOT_CAN_ID);
@@ -55,7 +58,7 @@ public class Pivot extends SubsystemBase{
         // pivotEncoder.getConfigurator().apply(configureCANCoder(new CANcoderConfiguration()));
 
         rightPivot.setPosition(ENCODER_OFFSET);
-
+    
         // rightPivot.setControl(new MotionMagicVoltage(0));
         leftPivot.setControl(new Follower(RIGHT_PIVOT_CAN_ID, true));
     }
@@ -74,6 +77,8 @@ public class Pivot extends SubsystemBase{
         config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
         config.Feedback.SensorToMechanismRatio = GEAR_REDUCTION;
         config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
+
+        setpoint = ENCODER_OFFSET;
 
         config.Slot0.kS = kS;
         config.Slot0.kV = kV;
@@ -108,5 +113,12 @@ public class Pivot extends SubsystemBase{
     public double getAngleDegrees(){
         StatusSignal<Angle> positionSignal = pivotEncoder.getPosition();
         return positionSignal.getValue().in(Degrees);
+    }
+
+    public boolean atSetpoint(){
+        StatusSignal<Angle> posSignal = rightPivot.getPosition();
+        double curPos = posSignal.getValue().in(Degrees);
+
+        return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
     }
 }
