@@ -16,11 +16,16 @@ public class EndEffector extends SubsystemBase{
     
 
     private final double INTAKE_SPEED = 0.60 * 12; //60% output
-    private final double HOLD_SPEED = 0.01 * 12; //1% outpput
+    private final double HOLD_SPEED = 0.01 * 12; //1% output
+    private final double EJECT_SPEED = 1.0 * 12; //100% output
 
     public EndEffector(){
         indexMotor = new TalonFX(INDEX_MOTOR_CAN_ID);
         beamBreak = new DigitalInput(BEAM_BREAK_ID);
+    }
+
+    public void setEjectSpeed(){
+        indexMotor.setControl(new VoltageOut(EJECT_SPEED));
     }
 
     public void setIntakeSpeed(){
