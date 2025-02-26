@@ -35,7 +35,7 @@ public class RoughAlign extends Command{
 
     @Override
     public boolean isFinished(){
-        return (driveCommand.isFinished() || distance(drivetrain.getState().Pose) < 1);
+        return (driveCommand.isFinished() || distance(drivetrain.getState().Pose) < 0.5);
     }
 
     @Override

@@ -353,7 +353,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     
     public Command driveToPose(Pose2d pose){
         PathConstraints constraints = new PathConstraints(
-            3.0, 3.0,
+            2.0, 2.0,
             3.0, Units.degreesToRadians(720));
         
         

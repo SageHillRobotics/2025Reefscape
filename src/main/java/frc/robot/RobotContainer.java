@@ -20,14 +20,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Align.AutoAlign;
+import frc.robot.commands.Align.PreciseAlign;
+import frc.robot.commands.EndEffector.DropCoral;
+import frc.robot.commands.EndEffector.IntakeCoral;
+import frc.robot.commands.Groups.ScoreL3;
 import frc.robot.commands.Pivot.ReefPosition;
 import frc.robot.commands.Telescope.MoveToL3;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.EndEffector;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Telescope;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
     private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -73,8 +79,9 @@ public class RobotContainer {
 
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final Pivot pivot = new Pivot();
-    public final Telescope telescope = new Telescope();
+    public final Pivot m_pivot = new Pivot();
+    public final Telescope m_telescope = new Telescope();
+    public final EndEffector m_endEffector = new EndEffector();
 
   	private final SendableChooser<Command> autoChooser;
 
@@ -82,6 +89,19 @@ public class RobotContainer {
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        NamedCommands.registerCommand("ScoreL3", new ScoreL3(m_endEffector, m_pivot, m_telescope));
+        NamedCommands.registerCommand("ReefPosition", new ReefPosition(m_pivot));
+        NamedCommands.registerCommand("IntakeCoral", new IntakeCoral(m_endEffector));
+        NamedCommands.registerCommand("DropCoral", new DropCoral(m_endEffector));
+
+        NamedCommands.registerCommand("AlignSourceRight", new AutoAlign(drivetrain, "sourceRight"));
+        NamedCommands.registerCommand("AlignSourceLeft", new AutoAlign(drivetrain, "sourceLeft"));
+        NamedCommands.registerCommand("AlignI", new AutoAlign(drivetrain, "I"));
+        NamedCommands.registerCommand("AlignJ", new AutoAlign(drivetrain, "J"));
+        NamedCommands.registerCommand("AlignK", new AutoAlign(drivetrain, "K"));
+
+        
         configureBindings();
     }
 
@@ -101,8 +121,8 @@ public class RobotContainer {
         );
 
         // lineUp.toggleOnTrue(drivetrain.pathFind());
-        sourceLeftLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceLeft"));
-        sourceRightLineUp.toggleOnTrue(new AutoAlign(drivetrain, "sourceRight"));
+        sourceLeftLineUp.whileTrue(new AutoAlign(drivetrain, "sourceLeft"));
+        sourceRightLineUp.whileTrue(new AutoAlign(drivetrain, "sourceRight"));
 
         aLineUp.whileTrue(new AutoAlign(drivetrain, "A"));
         bLineUp.whileTrue(new AutoAlign(drivetrain, "B"));
@@ -130,8 +150,8 @@ public class RobotContainer {
         // reset the field-centric heading on left bumper press
         zeroGyro.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
-        pivotReefPosition.toggleOnTrue(new ReefPosition(pivot));
-        L3Position.toggleOnTrue(new MoveToL3(telescope));
+        pivotReefPosition.toggleOnTrue(new ReefPosition(m_pivot));
+        L3Position.toggleOnTrue(new MoveToL3(m_telescope));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

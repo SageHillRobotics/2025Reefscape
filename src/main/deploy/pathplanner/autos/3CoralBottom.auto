@@ -7,7 +7,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.0"
+            "pathName": "3CoralBottom.0"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.1"
+            "pathName": "3CoralBottom.1"
           }
         },
         {
@@ -57,7 +57,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.2"
+            "pathName": "3CoralBottom.2"
           }
         },
         {
@@ -82,7 +82,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.3"
+            "pathName": "3CoralBottom.3"
           }
         },
         {
@@ -107,7 +107,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.4"
+            "pathName": "3CoralBottom.4"
           }
         },
         {
