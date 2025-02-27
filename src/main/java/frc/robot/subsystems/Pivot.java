@@ -13,6 +13,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.util.Units;
@@ -26,24 +27,27 @@ public class Pivot extends SubsystemBase{
 
     private final int LEFT_PIVOT_CAN_ID = 7;
     private final int RIGHT_PIVOT_CAN_ID = 6;
-    private final int PIVOT_ENCODER_CAN_ID = 0;
+    private final int PIVOT_ENCODER_CAN_ID = 15;
 
     private final double GEAR_REDUCTION = 160/1.0;
-    private final double ENCODER_OFFSET = -(25.75 / 360);
+
+    private final double ENCODER_OFFSET = 0.152832;
+    private final double START_OFFSET = -(25.75 / 360); //Mechanism rotations
+    private final double ENCODER_ZERO_OFFSET = 0.231201;
 
     private final double kS = 0.14;
     private final double kV = 0.1; 
     private final double kG = 0.02;
     private final double kA = 0.08;
-    private final double kP = 60;
+    private final double kP = 100;
     private final double kI = 0;
     private final double kD = 0;
 
-    private final double kCruiseVelocity = 30;
-    private final double kAcceleration = 60;
-    private final double kJerk = 600;
+    private final double kCruiseVelocity = 80;
+    private final double kAcceleration = 160;
+    private final double kJerk = 1600;
 
-    private final double CURRENT_LIMIT = 20;
+    private final double CURRENT_LIMIT = 80;
 
     private double setpoint;
     private final double POSITION_TOLERANCE = 0.3; //0.3 degrees
@@ -55,30 +59,40 @@ public class Pivot extends SubsystemBase{
 
         rightPivot.getConfigurator().apply(configureRight(new TalonFXConfiguration()));
         leftPivot.getConfigurator().apply(configureLeft(new TalonFXConfiguration()));
-        // pivotEncoder.getConfigurator().apply(configureCANCoder(new CANcoderConfiguration()));
 
-        rightPivot.setPosition(ENCODER_OFFSET);
+        pivotEncoder.getConfigurator().apply(configureCANCoder(new CANcoderConfiguration()));
+
+        // rightPivot.setPosition(ENCODER_OFFSET);
     
         // rightPivot.setControl(new MotionMagicVoltage(0));
         leftPivot.setControl(new Follower(RIGHT_PIVOT_CAN_ID, true));
     }
 
-    // private CANcoderConfiguration configureCANCoder(CANcoderConfiguration config){
-    //     config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 1;
-    //     config.MagnetSensor.SensorDirection = SensorDirectionValue.CounterClockwise_Positive;
-    //     config.MagnetSensor.withMagnetOffset(-1 * ENCODER_OFFSET);
-    //     return config;
-    // }
+    private CANcoderConfiguration configureCANCoder(CANcoderConfiguration config){
+
+        config.MagnetSensor.AbsoluteSensorDiscontinuityPoint = 0.6;
+        config.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+
+        // config.MagnetSensor.withMagnetOffset(-(ENCODER_OFFSET - START_OFFSET));
+        config.MagnetSensor.withMagnetOffset(-ENCODER_ZERO_OFFSET);
+
+        return config;
+
+    }
 
     private TalonFXConfiguration configureRight(TalonFXConfiguration config){
-        // config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
-        // config.Feedback.SensorToMechanismRatio = 1.0;
-        // config.Feedback.RotorToSensorRatio = GEAR_REDUCTION;
-        config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
-        config.Feedback.SensorToMechanismRatio = GEAR_REDUCTION;
-        config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
 
-        setpoint = ENCODER_OFFSET;
+        config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
+
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        config.Feedback.FeedbackRemoteSensorID = pivotEncoder.getDeviceID();
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        
+        config.Feedback.SensorToMechanismRatio = 1.0;
+        config.Feedback.RotorToSensorRatio = GEAR_REDUCTION;
+
+        setpoint = -ENCODER_OFFSET;
 
         config.Slot0.kS = kS;
         config.Slot0.kV = kV;
@@ -96,16 +110,18 @@ public class Pivot extends SubsystemBase{
         return config;
     }
     private TalonFXConfiguration configureLeft(TalonFXConfiguration config){
-        config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
-        config.Feedback.withFeedbackRotorOffset(GEAR_REDUCTION);
-        // config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
-        config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
 
+        config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
+        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+        // config.Feedback.withFeedbackRotorOffset(GEAR_REDUCTION);
+        // config.Feedback.FeedbackRotorOffset = ENCODER_OFFSET;
+        // config.MotorOutput.withInverted(InvertedValue.Clockwise_Positive);
         return config;
     }
 
     public void movetoAngle(double degrees){
-        MotionMagicVoltage request = new MotionMagicVoltage(Units.degreesToRotations(degrees));
+        MotionMagicVoltage request = new MotionMagicVoltage(Units.degreesToRotations(degrees)).withEnableFOC(true);
         rightPivot.setControl(request);
         leftPivot.setControl(new Follower(RIGHT_PIVOT_CAN_ID, true));
     }
@@ -116,7 +132,7 @@ public class Pivot extends SubsystemBase{
     }
 
     public boolean atSetpoint(){
-        StatusSignal<Angle> posSignal = rightPivot.getPosition();
+        StatusSignal<Angle> posSignal = pivotEncoder.getPosition();
         double curPos = posSignal.getValue().in(Degrees);
 
         return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;

@@ -35,9 +35,9 @@ public class Telescope extends SubsystemBase{
     private final double kI = 0;
     private final double kD = 0;
 
-    private final double kCruiseVelocity = 30;
-    private final double kAcceleration = 60;
-    private final double kJerk = 600;
+    private final double kCruiseVelocity = 60;
+    private final double kAcceleration = 120;
+    private final double kJerk = 1200;
 
     public Telescope(){
         frontTelescope = new TalonFX(FRONT_TELESCOPE_CAN_ID);

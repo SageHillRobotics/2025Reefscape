@@ -37,7 +37,7 @@ public class Constants {
     }
     public static final class PivotConstants{
         public static final double reefAngleDegrees = 93;
-        public static final double stowAngleDegrees = -25;
+        public static final double stowAngleDegrees = 0;
         public static final double stationAngleDegrees = 30;
     }
 }

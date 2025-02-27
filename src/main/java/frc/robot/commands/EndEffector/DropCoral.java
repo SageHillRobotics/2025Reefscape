@@ -5,6 +5,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.EndEffector;
 
 public class DropCoral extends Command{
+    
+    private final Debouncer m_debouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
     private final EndEffector m_endEffector;
     public DropCoral(EndEffector m_endEffector){
         this.m_endEffector = m_endEffector;
@@ -16,10 +18,13 @@ public class DropCoral extends Command{
     }
     @Override
     public boolean isFinished(){
-        Debouncer m_debouncer = new Debouncer(0.2, Debouncer.DebounceType.kBoth);
         if (m_debouncer.calculate(m_endEffector.getBeamBreakValue())){
             return true;
         }
         return false;
+    }
+    @Override
+    public void end(boolean interrupted){
+        m_endEffector.indexBrake();
     }
 }

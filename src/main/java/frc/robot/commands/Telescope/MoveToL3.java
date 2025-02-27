@@ -13,6 +13,11 @@ public class MoveToL3 extends Command{
     public void initialize(){
         m_telescope.movetoPosition(12.28);
     }
+
+    @Override
+    public boolean isFinished(){
+        return m_telescope.atSetpoint();
+    }
     // @Override
     // public void end(boolean interrupted){
     //     m_telescope.movetoPosition(1);
