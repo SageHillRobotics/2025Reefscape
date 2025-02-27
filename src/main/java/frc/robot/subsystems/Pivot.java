@@ -12,7 +12,6 @@ import com.ctre.phoenix6.hardware.CANcoder;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
@@ -31,8 +30,6 @@ public class Pivot extends SubsystemBase{
 
     private final double GEAR_REDUCTION = 160/1.0;
 
-    private final double ENCODER_OFFSET = 0.152832;
-    private final double START_OFFSET = -(25.75 / 360); //Mechanism rotations
     private final double ENCODER_ZERO_OFFSET = 0.231201;
 
     private final double kS = 0.14;
@@ -92,7 +89,7 @@ public class Pivot extends SubsystemBase{
         config.Feedback.SensorToMechanismRatio = 1.0;
         config.Feedback.RotorToSensorRatio = GEAR_REDUCTION;
 
-        setpoint = -ENCODER_OFFSET;
+        setpoint = 0;
 
         config.Slot0.kS = kS;
         config.Slot0.kV = kV;
