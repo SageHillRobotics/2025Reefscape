@@ -18,9 +18,4 @@ public class ReefPosition extends Command{
     public boolean isFinished(){
         return m_pivot.atSetpoint();
     }
-
-    //@Override
-    // public void end(boolean interrupted){
-    //     m_pivot.movetoAngle((Constants.PivotConstants.stowAngleDegrees));
-    // }
 }
