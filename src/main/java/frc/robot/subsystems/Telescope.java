@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -91,7 +92,7 @@ public class Telescope extends SubsystemBase{
     
     public boolean atSetpoint(){
         StatusSignal<Angle> posSignal = frontTelescope.getPosition();
-        double curPos = posSignal.getValue().in(Degrees);
+        double curPos = posSignal.getValue().in(Rotations);
 
         return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
     }
