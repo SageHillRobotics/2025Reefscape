@@ -30,7 +30,7 @@ public class Telescope extends SubsystemBase{
     private final double kS = 0.25; 
     private final double kV = 2.5; 
     private final double kG = 0.25;
-    private final double kA = 5;
+    private final double kA = 0.05;
     private final double kP = (3.0/12);
     private final double kI = 0;
     private final double kD = 0;
