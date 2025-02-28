@@ -59,6 +59,10 @@ public class LED extends SubsystemBase{
 
     }
 
+    public Command solidGreen(){
+        return run(() -> setGreen());
+    }
+
     @Override
     public void periodic() {
         m_led.setData(m_ledBuffer);
