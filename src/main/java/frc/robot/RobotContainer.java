@@ -156,7 +156,7 @@ public class RobotContainer {
         zeroGyro.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         pivotReefPosition.toggleOnTrue(new ReefPosition(m_pivot));
-        L3Position.toggleOnTrue(new MoveToL3(m_telescope));
+        L3Position.onTrue(new MoveToL3(m_telescope));
         intakeCoral.onTrue(new IntakeCoral(m_endEffector));
         score.onTrue(new DropCoral(m_endEffector));
         sourceCoralIntake.onTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot));

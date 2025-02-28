@@ -11,7 +11,7 @@ public class MoveToL3 extends Command{
     }
     @Override
     public void initialize(){
-        m_telescope.movetoPosition(12.28);
+        m_telescope.movetoPosition(4);
     }
 
     @Override

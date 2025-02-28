@@ -21,23 +21,23 @@ public class Telescope extends SubsystemBase{
     private final int FRONT_TELESCOPE_CAN_ID = 9;
     private final int BACK_TELESCOPE_CAN_ID = 8;
 
-    private final double CURRENT_LIMIT = 20;
+    private final double CURRENT_LIMIT = 80;
     private final double POSITION_TOLERANCE = 12; //12 degrees
     private double setpoint;
 
     // private final double GEAR_RATIO = 4.0/1.0;
 
-    private final double kS = 0.13; 
-    private final double kV = 3; 
-    private final double kG = 0.26;
+    private final double kS = 0.25; 
+    private final double kV = 2.5; 
+    private final double kG = 0.25;
     private final double kA = 5;
-    private final double kP = (12/20);
+    private final double kP = (3.0/12);
     private final double kI = 0;
     private final double kD = 0;
 
-    private final double kCruiseVelocity = 60;
-    private final double kAcceleration = 120;
-    private final double kJerk = 1200;
+    private final double kCruiseVelocity = 0.5;
+    private final double kAcceleration = 5;
+    private final double kJerk = 50;
 
     public Telescope(){
         frontTelescope = new TalonFX(FRONT_TELESCOPE_CAN_ID);
