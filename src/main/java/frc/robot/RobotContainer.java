@@ -111,6 +111,15 @@ public class RobotContainer {
 
         NamedCommands.registerCommand("AlignSourceRight", new AutoAlign(drivetrain, "sourceRight"));
         NamedCommands.registerCommand("AlignSourceLeft", new AutoAlign(drivetrain, "sourceLeft"));
+
+        NamedCommands.registerCommand("AlignA", new AutoAlign(drivetrain, "A"));
+        NamedCommands.registerCommand("AlignB", new AutoAlign(drivetrain, "B"));
+        NamedCommands.registerCommand("AlignC", new AutoAlign(drivetrain, "C"));
+        NamedCommands.registerCommand("AlignD", new AutoAlign(drivetrain, "D"));
+        NamedCommands.registerCommand("AlignE", new AutoAlign(drivetrain, "E"));
+        NamedCommands.registerCommand("AlignF", new AutoAlign(drivetrain, "F"));
+        NamedCommands.registerCommand("AlignG", new AutoAlign(drivetrain, "G"));
+        NamedCommands.registerCommand("AlignH", new AutoAlign(drivetrain, "H"));
         NamedCommands.registerCommand("AlignI", new AutoAlign(drivetrain, "I"));
         NamedCommands.registerCommand("AlignJ", new AutoAlign(drivetrain, "J"));
         NamedCommands.registerCommand("AlignK", new AutoAlign(drivetrain, "K"));

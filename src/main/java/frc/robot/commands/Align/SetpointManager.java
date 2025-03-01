@@ -26,15 +26,18 @@ public class SetpointManager {
         setpoints.put("sourceRight", new Pose2d(1.05, .95, Rotation2d.fromRadians(.95)));
 
         setpoints.put("A", new Pose2d(3.4, 4.2, Rotation2d.fromDegrees(180)));
-        setpoints.put("B", new Pose2d(3.2, 3.85, Rotation2d.fromDegrees(0)));
-        setpoints.put("C", new Pose2d(3.75, 3.05, Rotation2d.fromDegrees(60)));
-        setpoints.put("D", new Pose2d(4.0, 2.85, Rotation2d.fromDegrees(60)));
-        setpoints.put("E", new Pose2d(5.33, 3.95, Rotation2d.fromDegrees(120)));
-        setpoints.put("F", new Pose2d(5.25, 3.04, Rotation2d.fromDegrees(120)));
-        setpoints.put("G", new Pose2d(5.72, 3.85, Rotation2d.fromDegrees(180)));
-        setpoints.put("H", new Pose2d(5.72, 4.2, Rotation2d.fromDegrees(180)));
-        setpoints.put("I", new Pose2d(5.25, 5.02, Rotation2d.fromDegrees(240)));
-        setpoints.put("J", new Pose2d(4.95, 5.18, Rotation2d.fromDegrees(240)));
+        setpoints.put("B", new Pose2d(3.4, 3.85, Rotation2d.fromDegrees(180)));
+        setpoints.put("C", new Pose2d(3.81, 3.18, Rotation2d.fromDegrees(240)));
+        setpoints.put("D", new Pose2d(4.09, 3.00, Rotation2d.fromDegrees(240)));
+        setpoints.put("E", new Pose2d(4.88, 3.01, Rotation2d.fromDegrees(300)));
+        setpoints.put("F", new Pose2d(5.17, 3.17, Rotation2d.fromDegrees(300)));
+        setpoints.put("G", new Pose2d(5.59, 3.86, Rotation2d.fromDegrees(0)));
+        setpoints.put("H", new Pose2d(5.59, 4.18, Rotation2d.fromDegrees(0)));
+        setpoints.put("I", new Pose2d(5.17, 4.92, Rotation2d.fromDegrees(60)));
+        setpoints.put("J", new Pose2d(4.88, 5.09, Rotation2d.fromDegrees(60)));
+        setpoints.put("K", new Pose2d(4.07, 5.1, Rotation2d.fromDegrees(120)));
+        setpoints.put("L", new Pose2d(3.8, 4.9, Rotation2d.fromDegrees(120)));
+
 
         setpoints.put("barge", new Pose2d(8, 6, Rotation2d.fromDegrees(0)));
     }
