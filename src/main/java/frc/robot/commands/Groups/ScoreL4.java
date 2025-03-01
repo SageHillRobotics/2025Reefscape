@@ -2,7 +2,6 @@ package frc.robot.commands.Groups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
-import frc.robot.commands.EndEffector.DropCoral;
 import frc.robot.commands.Pivot.ReefPosition;
 import frc.robot.commands.Telescope.MoveToL4;
 import frc.robot.subsystems.EndEffector;
@@ -15,6 +14,5 @@ public class ScoreL4 extends SequentialCommandGroup{
         
         addCommands(new ReefPosition(m_pivot));
         addCommands(new MoveToL4(m_telescope));
-        addCommands(new DropCoral(m_endEffector));
     }
 }

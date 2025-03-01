@@ -2,7 +2,6 @@ package frc.robot.commands.Groups;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
-import frc.robot.commands.EndEffector.DropCoral;
 import frc.robot.commands.Pivot.StowPosition;
 import frc.robot.commands.Telescope.MoveToStow;
 import frc.robot.subsystems.EndEffector;
