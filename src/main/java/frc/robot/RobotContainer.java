@@ -86,6 +86,9 @@ public class RobotContainer {
     private final Trigger hLineUp = buttonBoard.button(8);
     private final Trigger iLineUp = buttonBoard.button(9);
     private final Trigger jLineUp = buttonBoard.button(10);
+    private final Trigger kLineUp = buttonBoard.button(11);
+    private final Trigger lLineUp = buttonBoard.button(12);
+
 
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
@@ -123,6 +126,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("AlignI", new AutoAlign(drivetrain, "I"));
         NamedCommands.registerCommand("AlignJ", new AutoAlign(drivetrain, "J"));
         NamedCommands.registerCommand("AlignK", new AutoAlign(drivetrain, "K"));
+        NamedCommands.registerCommand("AlignL", new AutoAlign(drivetrain, "L"));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -131,17 +135,14 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-driver.getRawAxis(translationAxis) * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-driver.getRawAxis(strafeAxis) * MaxSpeed) // Drive left with negative X (left)
+                drive.withVelocityX(-driver.getRawAxis(translationAxis) * MaxSpeed)
+                    .withVelocityY(-driver.getRawAxis(strafeAxis) * MaxSpeed)
                     .withRotationalRate(
                         cwButton.getAsBoolean() && !ccwButton.getAsBoolean() ? -0.75 * MaxAngularRate :
                         (ccwButton.getAsBoolean() && !cwButton.getAsBoolean() ? 0.75 * MaxAngularRate : 0)
-                    ) // Drive counterclockwise with negative X (left)
+                    )
             )
         );
 
@@ -159,20 +160,9 @@ public class RobotContainer {
         hLineUp.whileTrue(new AutoAlign(drivetrain, "H"));
         iLineUp.whileTrue(new AutoAlign(drivetrain, "I"));
         jLineUp.whileTrue(new AutoAlign(drivetrain, "J"));
+        kLineUp.whileTrue(new AutoAlign(drivetrain, "K"));
+        lLineUp.whileTrue(new AutoAlign(drivetrain, "L"));
 
-
-        // joystick.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // joystick.b().whileTrue(drivetrain.applyRequest(() ->
-        //     point.withModuleDirection(new Rotation2d(-joystick.getLeftY(), -joystick.getLeftX()))));
-
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
-
-        // reset the field-centric heading on left bumper press
         zeroGyro.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         pivotReefPosition.toggleOnTrue(new ReefPosition(m_pivot));
