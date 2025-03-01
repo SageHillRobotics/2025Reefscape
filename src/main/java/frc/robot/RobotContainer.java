@@ -98,9 +98,7 @@ public class RobotContainer {
 
 
     public RobotContainer() {
-        autoChooser = AutoBuilder.buildAutoChooser();
 
-        SmartDashboard.putData("Auto Chooser", autoChooser);
 
         NamedCommands.registerCommand("ScoreL3", new ScoreL3(m_endEffector, m_pivot, m_telescope, m_led));
         NamedCommands.registerCommand("ScoreL2", new ScoreL2(m_endEffector, m_pivot, m_telescope, m_led));
@@ -117,6 +115,8 @@ public class RobotContainer {
         NamedCommands.registerCommand("AlignJ", new AutoAlign(drivetrain, "J"));
         NamedCommands.registerCommand("AlignK", new AutoAlign(drivetrain, "K"));
 
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
         
         configureBindings();
     }
