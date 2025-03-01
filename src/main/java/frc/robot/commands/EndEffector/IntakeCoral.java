@@ -6,7 +6,7 @@ import frc.robot.subsystems.EndEffector;
 
 public class IntakeCoral extends Command{
     private final EndEffector m_endEffector;
-    private final Debouncer m_debouncer = new Debouncer(0.125, Debouncer.DebounceType.kBoth);
+    private final Debouncer m_debouncer = new Debouncer(0.05, Debouncer.DebounceType.kBoth);
 
     public IntakeCoral(EndEffector m_endEffector){
         this.m_endEffector = m_endEffector;

@@ -28,7 +28,7 @@ public class Pivot extends SubsystemBase{
     private final int RIGHT_PIVOT_CAN_ID = 6;
     private final int PIVOT_ENCODER_CAN_ID = 15;
 
-    private final double GEAR_REDUCTION = 160/1.0;
+    private final double GEAR_REDUCTION = 180/1.0;
 
     private final double ENCODER_ZERO_OFFSET = 0.231201;
 
@@ -47,7 +47,7 @@ public class Pivot extends SubsystemBase{
     private final double CURRENT_LIMIT = 80;
 
     private double setpoint;
-    private final double POSITION_TOLERANCE = 0.3; //0.3 degrees
+    private final double POSITION_TOLERANCE = 3; //1 degree
 
     public Pivot(){
         rightPivot = new TalonFX(RIGHT_PIVOT_CAN_ID);
@@ -121,6 +121,7 @@ public class Pivot extends SubsystemBase{
         MotionMagicVoltage request = new MotionMagicVoltage(Units.degreesToRotations(degrees)).withEnableFOC(true);
         rightPivot.setControl(request);
         leftPivot.setControl(new Follower(RIGHT_PIVOT_CAN_ID, true));
+        setpoint = degrees;
     }
 
     public double getAngleDegrees(){

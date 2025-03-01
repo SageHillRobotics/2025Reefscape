@@ -1,6 +1,8 @@
 package frc.robot.commands.Groups;
 
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Pivot;
 import frc.robot.commands.EndEffector.DropCoral;
 import frc.robot.commands.Pivot.ReefPosition;
@@ -14,7 +16,7 @@ public class ScoreL2 extends SequentialCommandGroup{
         addRequirements(m_endEffector, m_pivot, m_telescope);
         
         addCommands(new ReefPosition(m_pivot));
-        addCommands(new MoveToL2(m_telescope));
+        addCommands(new ParallelDeadlineGroup(new WaitCommand(5), new MoveToL2(m_telescope)));
         addCommands(new DropCoral(m_endEffector));
     }
 }

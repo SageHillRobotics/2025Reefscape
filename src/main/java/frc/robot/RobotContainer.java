@@ -22,10 +22,15 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.commands.EndEffector.DropCoral;
 import frc.robot.commands.EndEffector.IntakeCoral;
+import frc.robot.commands.Groups.ScoreL2;
 import frc.robot.commands.Groups.ScoreL3;
+import frc.robot.commands.Groups.ScoreL4;
 import frc.robot.commands.Groups.SourceCoralIntake;
+import frc.robot.commands.Groups.Stow;
 import frc.robot.commands.Pivot.ReefPosition;
+import frc.robot.commands.Telescope.MoveToL2;
 import frc.robot.commands.Telescope.MoveToL3;
+import frc.robot.commands.Telescope.MoveToL4;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.EndEffector;
@@ -62,10 +67,14 @@ public class RobotContainer {
     private final Trigger zeroGyro = driver.button(2);
 
     private final Trigger pivotReefPosition = driver.button(7);
-    private final Trigger L3Position = driver.button(9);
+    private final Trigger L2Position = driver.button(9);
+    private final Trigger L3Position = driver.button(10);
+    private final Trigger L4Position = driver.button(12);
+
     private final Trigger intakeCoral = driver.button(3);
     private final Trigger score = driver.button(1);
     private final Trigger sourceCoralIntake = driver.button(4);
+    private final Trigger stow = driver.button(11);
 
     private final Trigger sourceLeftLineUp = auxButtonBoard.button(1);
     private final Trigger sourceRightLineUp = auxButtonBoard.button(2);
@@ -93,9 +102,14 @@ public class RobotContainer {
 
     public RobotContainer() {
         autoChooser = AutoBuilder.buildAutoChooser();
+
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         NamedCommands.registerCommand("ScoreL3", new ScoreL3(m_endEffector, m_pivot, m_telescope, m_led));
+        NamedCommands.registerCommand("ScoreL2", new ScoreL2(m_endEffector, m_pivot, m_telescope, m_led));
+        NamedCommands.registerCommand("ScoreL4", new ScoreL4(m_endEffector, m_pivot, m_telescope, m_led));
+
+        
         NamedCommands.registerCommand("ReefPosition", new ReefPosition(m_pivot));
         NamedCommands.registerCommand("IntakeCoral", new IntakeCoral(m_endEffector));
         NamedCommands.registerCommand("DropCoral", new DropCoral(m_endEffector));
@@ -156,10 +170,14 @@ public class RobotContainer {
         zeroGyro.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
         pivotReefPosition.toggleOnTrue(new ReefPosition(m_pivot));
-        L3Position.onTrue(new MoveToL3(m_telescope));
+        L2Position.onTrue(new ScoreL2(m_endEffector, m_pivot, m_telescope, m_led));
+        L3Position.onTrue(new ScoreL3(m_endEffector, m_pivot, m_telescope, m_led));
+        L4Position.onTrue(new ScoreL4(m_endEffector, m_pivot, m_telescope, m_led));
+
         intakeCoral.onTrue(new IntakeCoral(m_endEffector));
         score.onTrue(new DropCoral(m_endEffector));
-        sourceCoralIntake.onTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot));
+        sourceCoralIntake.onTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
+        stow.onTrue(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

@@ -36,14 +36,15 @@ public class Constants {
     public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
     }
     public static final class PivotConstants{
-        public static final double reefAngleDegrees = 93;
+        public static final double reefAngleDegrees = 90;
         public static final double stowAngleDegrees = 0;
-        public static final double stationAngleDegrees = 49;
+        public static final double stationAngleDegrees = 43;
     }
     public static final class TelescopeConstants{
-        public static final double sourceRotations = 0.5;
+        public static final double stowRotations = 0.25;
+        public static final double sourceRotations = 1.5;
         public static final double L2Rotations = 1.5;
         public static final double L3Rotations = 9.7;
-        public static final double L4Rotations = 20.38;
+        public static final double L4Rotations = 21.4;
     }
 }
