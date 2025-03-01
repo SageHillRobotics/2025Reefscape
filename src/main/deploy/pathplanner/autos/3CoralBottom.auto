@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ScoreL3"
+                  "name": "ScoreL4"
                 }
               }
             ]
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": null
+            "name": "ScoreCoral"
           }
         },
         {
@@ -79,10 +79,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ScoreL3"
+                  "name": "ScoreL4"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral"
           }
         },
         {
@@ -129,10 +135,16 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "ScoreL3"
+                  "name": "ScoreL4"
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ScoreCoral"
           }
         }
       ]

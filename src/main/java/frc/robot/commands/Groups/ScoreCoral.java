@@ -9,8 +9,8 @@ import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Telescope;
 
-public class EjectCoral extends SequentialCommandGroup{
-    public EjectCoral(EndEffector m_endEffector, Pivot m_pivot, Telescope m_telescope, LED m_led){
+public class ScoreCoral extends SequentialCommandGroup{
+    public ScoreCoral(EndEffector m_endEffector, Pivot m_pivot, Telescope m_telescope, LED m_led){
         addRequirements(m_endEffector, m_pivot, m_telescope);
 
         addCommands(new DropCoral(m_endEffector));

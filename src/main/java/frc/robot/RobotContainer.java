@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.commands.EndEffector.DropCoral;
 import frc.robot.commands.EndEffector.IntakeCoral;
+import frc.robot.commands.Groups.ScoreCoral;
 import frc.robot.commands.Groups.ScoreL2;
 import frc.robot.commands.Groups.ScoreL3;
 import frc.robot.commands.Groups.ScoreL4;
@@ -111,6 +112,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("ReefPosition", new ReefPosition(m_pivot));
         NamedCommands.registerCommand("IntakeCoral", new IntakeCoral(m_endEffector));
         NamedCommands.registerCommand("DropCoral", new DropCoral(m_endEffector));
+        NamedCommands.registerCommand("ScoreCoral", new ScoreCoral(m_endEffector, m_pivot, m_telescope, m_led));
 
         NamedCommands.registerCommand("AlignSourceRight", new AutoAlign(drivetrain, "sourceRight"));
         NamedCommands.registerCommand("AlignSourceLeft", new AutoAlign(drivetrain, "sourceLeft"));
@@ -169,10 +171,11 @@ public class RobotContainer {
         L2Position.onTrue(new ScoreL2(m_endEffector, m_pivot, m_telescope, m_led));
         L3Position.onTrue(new ScoreL3(m_endEffector, m_pivot, m_telescope, m_led));
         L4Position.onTrue(new ScoreL4(m_endEffector, m_pivot, m_telescope, m_led));
+        score.onTrue(new ScoreCoral(m_endEffector, m_pivot, m_telescope, m_led));
 
-        intakeCoral.onTrue(new IntakeCoral(m_endEffector));
-        score.onTrue(new DropCoral(m_endEffector));
         sourceCoralIntake.onTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
+        intakeCoral.onTrue(new IntakeCoral(m_endEffector));
+        
         stow.onTrue(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
 
         drivetrain.registerTelemetry(logger::telemeterize);
