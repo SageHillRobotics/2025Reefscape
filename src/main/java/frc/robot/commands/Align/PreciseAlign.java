@@ -36,6 +36,8 @@ public class PreciseAlign extends Command {
     private static final double kYTolerance = 0.05;      // in meters
     private static final double kThetaTolerance = Math.toRadians(2);  // in radians
 
+    private static double invert = 1;
+
     /**
      * @param drivetrain The swerve drivetrain subsystem.
      * @param targetPose The desired target pose.
@@ -60,6 +62,7 @@ public class PreciseAlign extends Command {
     @Override
     public void initialize() {
         Alliance alliance = DriverStation.getAlliance().orElse(Alliance.Blue);
+        if (alliance == Alliance.Red) invert = -1;
 
         targetPose = setpointManager.getSetpoint(targetKey, alliance);
 
@@ -77,14 +80,9 @@ public class PreciseAlign extends Command {
         double ySpeed = yPID.calculate(currentPose.getTranslation().getY(), targetPose.getTranslation().getY());
         double thetaSpeed = thetaPID.calculate(currentPose.getRotation().getRadians(), targetPose.getRotation().getRadians());
 
-        // drivetrain.applyRequest(() ->
-        //     drive.withVelocityX(xSpeed)
-        //         .withVelocityY(ySpeed)
-        //         .withRotationalRate(thetaSpeed)
-        // );
         drivetrain.setControl(
-            drive.withVelocityX(MathUtil.clamp(xSpeed, -maxSpeed, maxSpeed))
-                .withVelocityY(MathUtil.clamp(ySpeed, -maxSpeed, maxSpeed))
+            drive.withVelocityX(MathUtil.clamp(xSpeed * invert, -maxSpeed, maxSpeed))
+                .withVelocityY(MathUtil.clamp(ySpeed * invert, -maxSpeed, maxSpeed))
                 .withRotationalRate(MathUtil.clamp(thetaSpeed, -maxAngularSpeed, maxAngularSpeed))
         );
     }
