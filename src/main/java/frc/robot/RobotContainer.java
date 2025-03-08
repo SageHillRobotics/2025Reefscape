@@ -74,6 +74,8 @@ public class RobotContainer {
     private final Trigger sourceCoralIntake = driver.button(4);
     private final Trigger stow = driver.button(11);
 
+    private final Trigger ledTest = driver.button(8);
+
     private final Trigger sourceLeftLineUp = auxButtonBoard.button(1);
     private final Trigger sourceRightLineUp = auxButtonBoard.button(2);
 
@@ -177,6 +179,8 @@ public class RobotContainer {
         intakeCoral.onTrue(new IntakeCoral(m_endEffector));
         
         stow.onTrue(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
+
+        ledTest.onTrue(m_led.blinkGreen());
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

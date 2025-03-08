@@ -22,7 +22,7 @@ public class LED extends SubsystemBase{
         m_led.setLength(m_ledBuffer.getLength());
         m_led.start();
         
-        setDefaultCommand(setOff());
+        setDefaultCommand(solidGreen());
     }
 
     public void setGreen(){

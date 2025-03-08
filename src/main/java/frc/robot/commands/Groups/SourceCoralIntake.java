@@ -25,6 +25,6 @@ public class SourceCoralIntake extends SequentialCommandGroup{
         
         addCommands(new MoveToStation(m_telescope));
         addCommands(new ParallelDeadlineGroup(new IntakeCoral(m_endEffector), new StationPosition(m_pivot)), m_led.blinkPurple());
-        addCommands(new ParallelCommandGroup(m_led.solidGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
+        addCommands(new ParallelCommandGroup(m_led.blinkGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
     }
 }
