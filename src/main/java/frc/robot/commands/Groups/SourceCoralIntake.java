@@ -1,10 +1,9 @@
 package frc.robot.commands.Groups;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.EndEffector.IntakeCoral;
+import frc.robot.commands.Pivot.ReefPosition;
 import frc.robot.commands.Pivot.StationPosition;
 import frc.robot.commands.Telescope.MoveToStation;
 import frc.robot.subsystems.EndEffector;
@@ -24,7 +23,8 @@ public class SourceCoralIntake extends SequentialCommandGroup{
         addRequirements(m_endEffector, m_led, m_pivot);
         
         addCommands(new MoveToStation(m_telescope));
-        addCommands(new ParallelDeadlineGroup(new IntakeCoral(m_endEffector), new StationPosition(m_pivot)), m_led.blinkPurple());
-        addCommands(new ParallelCommandGroup(m_led.blinkGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
+        addCommands(new ParallelDeadlineGroup(new IntakeCoral(m_endEffector), new StationPosition(m_pivot), m_led.blinkPurple()));
+        addCommands(new ParallelDeadlineGroup(new ReefPosition(m_pivot), m_led.blinkGreen()));
+        // addCommands(new ParallelCommandGroup(m_led.blinkGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
     }
 }
