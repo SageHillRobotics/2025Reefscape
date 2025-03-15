@@ -17,7 +17,7 @@ public class Constants {
                                                                         Units.inchesToMeters(9.104));
 
     public static final Rotation3d LEFT_CAM_ROTATION =  new Rotation3d(0,   
-                                                                        Units.degreesToRadians(18.7), 
+                                                                        Units.degreesToRadians(-18.7), 
                                                                         Units.degreesToRadians(-160));
     
     public static final Translation3d RIGHT_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(-10.497), 
@@ -25,7 +25,7 @@ public class Constants {
                                                                         Units.inchesToMeters(9.104));
 
     public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0, 
-                                                                        Units.degreesToRadians(18.7), 
+                                                                        Units.degreesToRadians(-18.7), 
                                                                         Units.degreesToRadians(160));
                                                                         
     public static final Transform3d LEFT_CAM_TRANSFORM = new Transform3d(LEFT_CAM_TRANSLATION, LEFT_CAM_ROTATION);
@@ -38,13 +38,13 @@ public class Constants {
     public static final class PivotConstants{
         public static final double reefAngleDegrees = 90;
         public static final double stowAngleDegrees = 0;
-        public static final double stationAngleDegrees = 43;
+        public static final double stationAngleDegrees = 46;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;
-        public static final double sourceRotations = 1.5;
+        public static final double sourceRotations = 4;
         public static final double L2Rotations = 1.5;
-        public static final double L3Rotations = 9.7;
-        public static final double L4Rotations = 21.4;
+        public static final double L3Rotations = 4;
+        public static final double L4Rotations = 17.5;
     }
 }

@@ -17,7 +17,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignI"
+                  "name": "AlignF"
                 }
               },
               {
@@ -54,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignSourceLeft"
+                  "name": "AlignSourceRight"
                 }
               }
             ]
@@ -73,7 +73,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignJ"
+                  "name": "AlignE"
                 }
               },
               {
@@ -110,7 +110,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignSourceLeft"
+                  "name": "AlignSourceRight"
                 }
               }
             ]
@@ -129,7 +129,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignK"
+                  "name": "AlignD"
                 }
               },
               {

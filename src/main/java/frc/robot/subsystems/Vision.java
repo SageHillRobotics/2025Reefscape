@@ -7,16 +7,23 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Robot;
 
 public class Vision extends SubsystemBase {
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
@@ -27,8 +34,10 @@ public class Vision extends SubsystemBase {
     private Matrix<N3, N1> curStdDevsLeft;
     private Matrix<N3, N1> curStdDevsRight;
 
-
-
+    //Sim
+    private VisionSystemSim visionSim;
+    private PhotonCameraSim leftReefCameraSim;
+    private PhotonCameraSim rightReefCameraSim;
 
     public Vision() {
         leftCam = new PhotonCamera("Left_Reef_Cam");
@@ -40,7 +49,26 @@ public class Vision extends SubsystemBase {
         photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.RIGHT_CAM_TRANSFORM);
         photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
+        if (Robot.isSimulation()){
+            visionSim = new VisionSystemSim("Vision Sim");
+            visionSim.addAprilTags(aprilTagFieldLayout);
 
+            var cameraProp = new SimCameraProperties();
+            cameraProp.setCalibration(1280, 720, Rotation2d.fromDegrees(90));
+            cameraProp.setCalibError(0.35, 0.10);
+            cameraProp.setFPS(30);
+            cameraProp.setAvgLatencyMs(50);
+            cameraProp.setLatencyStdDevMs(15);
+
+            leftReefCameraSim = new PhotonCameraSim(leftCam, cameraProp);
+            rightReefCameraSim = new PhotonCameraSim(rightCam, cameraProp);
+            // Add the simulated camera to view the targets on this simulated field.
+            visionSim.addCamera(leftReefCameraSim, Constants.VisionConstants.LEFT_CAM_TRANSFORM);
+            visionSim.addCamera(rightReefCameraSim, Constants.VisionConstants.RIGHT_CAM_TRANSFORM);
+
+            leftReefCameraSim.enableDrawWireframe(true);
+            rightReefCameraSim.enableDrawWireframe(true);
+        }
     }
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseLeft() {
@@ -51,7 +79,6 @@ public class Vision extends SubsystemBase {
 
         }
         return visionEst;
-
     }
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseRight() {
@@ -62,7 +89,6 @@ public class Vision extends SubsystemBase {
 
         }
         return visionEst;
-
     }
 
     private void updateEstimationStdDevsLeft(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
@@ -155,6 +181,14 @@ public class Vision extends SubsystemBase {
         return curStdDevsRight;
     }
 
+    public Field2d getSimDebugField() {
+        if (!Robot.isSimulation()) return null;
+        return visionSim.getDebugField();
+    }
+
+    public void simulationPeriodic(Pose2d pose){
+        visionSim.update(pose);
+    }
 
     // public List<PhotonTrackedTarget> getTargets(){
     //     if (cam.getLatestResult().hasTargets()){
