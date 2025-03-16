@@ -1,8 +1,11 @@
 package frc.robot.commands.Groups;
 
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.EndEffector.DropCoral;
+import frc.robot.commands.Pivot.ReefIntermediatePosition;
+import frc.robot.commands.Pivot.ReefPosition;
 import frc.robot.commands.Pivot.StationPosition;
 import frc.robot.commands.Telescope.MoveToStation;
 import frc.robot.subsystems.EndEffector;
@@ -15,6 +18,7 @@ public class ScoreCoral extends SequentialCommandGroup{
         addRequirements(m_endEffector, m_pivot, m_telescope);
 
         addCommands(new ParallelDeadlineGroup(new DropCoral(m_endEffector), m_led.blinkGreen()));
+        addCommands(new ConditionalCommand(new ReefIntermediatePosition(m_pivot), new ReefPosition(m_pivot), (() -> m_telescope.getPosition() > 20)));
         addCommands(new ParallelDeadlineGroup(new MoveToStation(m_telescope), m_led.solidGreen()));
         addCommands(new StationPosition(m_pivot));
 

@@ -28,16 +28,16 @@ public class Telescope extends SubsystemBase{
     // private final double GEAR_RATIO = 4.0/1.0;
 
     private final double kS = 0.25; 
-    private final double kV = 0.4;    
+    private final double kV = 0.27;    
     private final double kG = 0.1;
     private final double kA = 0.02;
-    private final double kP = 2;
+    private final double kP = 2.5;
     private final double kI = 0;
     private final double kD = 0.3;
 
-    private final double kCruiseVelocity = 40;
-    private final double kAcceleration = 40;
-    private final double kJerk = 100;
+    private final double kCruiseVelocity = 80;
+    private final double kAcceleration = 80;
+    // private final double kJerk = 100;
 
     public Telescope(){
         frontTelescope = new TalonFX(FRONT_TELESCOPE_CAN_ID);
@@ -69,7 +69,7 @@ public class Telescope extends SubsystemBase{
 
         config.MotionMagic.MotionMagicCruiseVelocity = kCruiseVelocity;
         config.MotionMagic.MotionMagicAcceleration = kAcceleration;
-        config.MotionMagic.MotionMagicJerk = kJerk;
+        // config.MotionMagic.MotionMagicJerk = kJerk;
 
         return config;
     }
@@ -89,6 +89,12 @@ public class Telescope extends SubsystemBase{
         setpoint = rotations;
     }
     
+    public double getPosition(){
+        StatusSignal<Angle> posSignal = frontTelescope.getPosition();
+        double curPos = posSignal.getValue().in(Rotations);
+        return curPos;
+    }
+
     public boolean atSetpoint(){
         StatusSignal<Angle> posSignal = frontTelescope.getPosition();
         double curPos = posSignal.getValue().in(Rotations);

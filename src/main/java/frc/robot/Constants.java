@@ -37,14 +37,15 @@ public class Constants {
     }
     public static final class PivotConstants{
         public static final double reefAngleDegrees = 90;
+        public static final double reefIntermediateAngleDegrees = 86;
         public static final double stowAngleDegrees = 0;
         public static final double stationAngleDegrees = 46;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;
-        public static final double sourceRotations = 4;
+        public static final double sourceRotations = 2;
         public static final double L2Rotations = 1.5;
-        public static final double L3Rotations = 4;
-        public static final double L4Rotations = 17.5;
+        public static final double L3Rotations = 9.7;
+        public static final double L4Rotations = 21;
     }
 }
