@@ -11,19 +11,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignI"
+                  "name": "ScoreL4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ScoreL4"
+                  "name": "AlignI"
                 }
               }
             ]
@@ -67,19 +67,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignJ"
+                  "name": "ScoreL4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ScoreL4"
+                  "name": "AlignJ"
                 }
               }
             ]
@@ -123,19 +123,19 @@
           }
         },
         {
-          "type": "race",
+          "type": "deadline",
           "data": {
             "commands": [
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignK"
+                  "name": "ScoreL4"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "ScoreL4"
+                  "name": "AlignK"
                 }
               }
             ]

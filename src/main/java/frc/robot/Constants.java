@@ -39,7 +39,7 @@ public class Constants {
         public static final double reefAngleDegrees = 90;
         public static final double reefIntermediateAngleDegrees = 86;
         public static final double stowAngleDegrees = 0;
-        public static final double stationAngleDegrees = 46;
+        public static final double stationAngleDegrees = 50;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;

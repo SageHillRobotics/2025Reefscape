@@ -32,6 +32,8 @@ public class Pivot extends SubsystemBase{
 
     private final double ENCODER_ZERO_OFFSET = 0.231201;
 
+    // private final double RELATIVE_OFFSET = 90/360.0;
+
     private final double kS = 0.14;
     private final double kV = 0.1; 
     private final double kG = 0.02;
@@ -60,6 +62,7 @@ public class Pivot extends SubsystemBase{
         pivotEncoder.getConfigurator().apply(configureCANCoder(new CANcoderConfiguration()));
 
         // rightPivot.setPosition(ENCODER_OFFSET);
+        // rightPivot.setPosition(RELATIVE_OFFSET);
     
         // rightPivot.setControl(new MotionMagicVoltage(0));
         leftPivot.setControl(new Follower(RIGHT_PIVOT_CAN_ID, true));
@@ -88,6 +91,8 @@ public class Pivot extends SubsystemBase{
         
         config.Feedback.SensorToMechanismRatio = 1.0;
         config.Feedback.RotorToSensorRatio = GEAR_REDUCTION;
+
+        // config.Feedback.SensorToMechanismRatio = GEAR_REDUCTION;
 
         setpoint = 0;
 
@@ -126,10 +131,12 @@ public class Pivot extends SubsystemBase{
 
     public double getAngleDegrees(){
         StatusSignal<Angle> positionSignal = pivotEncoder.getPosition();
+        // StatusSignal<Angle> positionSignal = rightPivot.getPosition();
         return positionSignal.getValue().in(Degrees);
     }
 
     public boolean atSetpoint(){
+        // StatusSignal<Angle> posSignal = rightPivot.getPosition();
         StatusSignal<Angle> posSignal = pivotEncoder.getPosition();
         double curPos = posSignal.getValue().in(Degrees);
 
