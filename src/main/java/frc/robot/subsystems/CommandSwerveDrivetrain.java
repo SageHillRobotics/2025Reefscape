@@ -375,7 +375,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return AutoBuilder.pathfindToPose(
             pose,
             constraints,
-            0.0
+            1.0
                                         );
     }
 
