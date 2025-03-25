@@ -35,8 +35,8 @@ public class Telescope extends SubsystemBase{
     private final double kI = 0;
     private final double kD = 0.3;
 
-    private final double kCruiseVelocity = 80;
-    private final double kAcceleration = 80;
+    private final double kCruiseVelocity = 120;
+    private final double kAcceleration = 120;
     // private final double kJerk = 100;
 
     public Telescope(){

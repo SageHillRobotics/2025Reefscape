@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.commands.EndEffector.DropCoral;
 import frc.robot.commands.EndEffector.IntakeCoral;
+import frc.robot.commands.Groups.Climb;
+import frc.robot.commands.Groups.GroundCoralIntake;
 import frc.robot.commands.Groups.ScoreCoral;
 import frc.robot.commands.Groups.ScoreL2;
 import frc.robot.commands.Groups.ScoreL3;
@@ -69,7 +71,7 @@ public class RobotContainer {
     private final Trigger L3Position = driver.button(10);
     private final Trigger L4Position = driver.button(12);
 
-    private final Trigger intakeCoral = driver.button(3);
+    private final Trigger groundIntakeCoral = driver.button(3);
     private final Trigger score = driver.button(1);
     private final Trigger sourceCoralIntake = driver.button(4);
     private final Trigger stow = driver.button(11);
@@ -177,11 +179,11 @@ public class RobotContainer {
         score.onTrue(new ScoreCoral(m_endEffector, m_pivot, m_telescope, m_led));
 
         sourceCoralIntake.onTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
-        intakeCoral.onTrue(new IntakeCoral(m_endEffector));
-        
+        groundIntakeCoral.toggleOnTrue(new GroundCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
+
         stow.onTrue(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
 
-        ledTest.onTrue(m_led.blinkGreen());
+        ledTest.onTrue(new Climb(m_endEffector, m_pivot, m_telescope, m_led));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

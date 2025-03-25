@@ -39,13 +39,21 @@ public class Constants {
         public static final double reefAngleDegrees = 90;
         public static final double reefIntermediateAngleDegrees = 86;
         public static final double stowAngleDegrees = 0;
+        public static final double climbAngleDegrees = 10;
         public static final double stationAngleDegrees = 50;
+        public static final double groundIntakeAngleDegrees = -14;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;
         public static final double sourceRotations = 2;
+        public static final double groundRotations = 1.42;
         public static final double L2Rotations = 1.5;
         public static final double L3Rotations = 9.7;
         public static final double L4Rotations = 21;
+    }
+    public static final class WristConstants{
+        public static final double stowAngleDegrees = 129.5;
+        public static final double stationAngleDegrees = 20;
+        public static final double groundIntakeAngleDegrees = 55;
     }
 }

@@ -30,7 +30,7 @@ public class Pivot extends SubsystemBase{
 
     private final double GEAR_REDUCTION = 180/1.0;
 
-    private final double ENCODER_ZERO_OFFSET = 0.231201;
+    private final double ENCODER_ZERO_OFFSET = 0.556640;
 
     // private final double RELATIVE_OFFSET = 90/360.0;
 
