@@ -47,8 +47,8 @@ public class PreciseAlign extends Command {
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
 
-        xPID = new PIDController(7, 0.0, 0.1);
-        yPID = new PIDController(7, 0.0, 0.1);
+        xPID = new PIDController(5, 0.0, 0.1);
+        yPID = new PIDController(5, 0.0, 0.1);
         thetaPID = new PIDController(5, 0.0, 0.1);
 
         xPID.setTolerance(kXTolerance);
