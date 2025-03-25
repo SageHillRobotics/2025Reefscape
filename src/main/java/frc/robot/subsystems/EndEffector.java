@@ -46,7 +46,7 @@ public class EndEffector extends SubsystemBase{
     private final int BEAM_BREAK_ID = 9;
     
 
-    private final double INTAKE_SPEED = 0.80 * 12; //60% output
+    private final double INTAKE_SPEED = 0.30 * -12; //60% output
     // private final double HOLD_SPEED = 0.01 * 12; //1% output
     private final double EJECT_SPEED = 0.5 * 12; //100% output
 
@@ -54,7 +54,7 @@ public class EndEffector extends SubsystemBase{
     private final double ENCODER_TO_WRIST_RATIO = 1.0;
     private final double WRIST_CONVERSION_FACTOR = 1.0/ENCODER_TO_WRIST_RATIO;
     
-    private final double POSITION_TOLERANCE = 5.0/360.0;
+    private final double POSITION_TOLERANCE = 10/360.0;
 
     private double setpoint;
 
@@ -97,7 +97,7 @@ public class EndEffector extends SubsystemBase{
 
     public void setIntakeSpeed(){
         verticalRoller.setControl(new VoltageOut(INTAKE_SPEED));
-        horizontalRoller.set(-0.5);
+        horizontalRoller.set(-0.75);
     }
 
     public void indexBrake(){
@@ -115,8 +115,8 @@ public class EndEffector extends SubsystemBase{
     }
     
     public void wristToAngle(double setpointDegrees){
-        setpoint = setpointDegrees;
         double setpointRotations = Units.degreesToRotations(setpointDegrees);
+        setpoint = setpointRotations;
         wristController.setReference(setpointRotations, SparkBase.ControlType.kPosition);
     }
 

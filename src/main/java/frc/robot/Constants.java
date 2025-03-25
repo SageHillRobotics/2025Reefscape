@@ -41,7 +41,7 @@ public class Constants {
         public static final double stowAngleDegrees = 0;
         public static final double climbAngleDegrees = 10;
         public static final double stationAngleDegrees = 50;
-        public static final double groundIntakeAngleDegrees = -14;
+        public static final double groundIntakeAngleDegrees = -22;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;
