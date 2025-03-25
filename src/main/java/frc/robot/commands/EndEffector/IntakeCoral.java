@@ -18,11 +18,11 @@ public class IntakeCoral extends Command{
     }
     @Override
     public boolean isFinished(){
-        if (m_debouncer.calculate(m_endEffector.getBeamBreakValue() == false)){
-            return true;
-        }
-        return false;
-        // return !(m_endEffector.getBeamBreakValue());
+        // if (m_debouncer.calculate(m_endEffector.getBeamBreakValue() == false)){
+        //     return true;
+        // }
+        // return false;
+        return !(m_endEffector.getBeamBreakValue());
     }
     @Override
     public void end(boolean interrupted){
