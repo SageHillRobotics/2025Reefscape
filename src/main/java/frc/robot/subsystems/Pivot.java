@@ -35,16 +35,16 @@ public class Pivot extends SubsystemBase{
     // private final double RELATIVE_OFFSET = 90/360.0;
 
     private final double kS = 0.14;
-    private final double kV = 0.1; 
-    private final double kG = 0.02;
+    private final double kV = 10; 
+    private final double kG = 0.2;
     private final double kA = 0.08;
-    private final double kP = 100;
+    private final double kP = 48;
     private final double kI = 0;
     private final double kD = 0;
 
-    private final double kCruiseVelocity = 80;
-    private final double kAcceleration = 160;
-    private final double kJerk = 1600;
+    private final double kCruiseVelocity = 1;
+    private final double kAcceleration = 10;
+    private final double kJerk = 0;
 
     private final double CURRENT_LIMIT = 80;
 

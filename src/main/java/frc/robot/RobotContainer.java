@@ -21,7 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.commands.EndEffector.DropCoral;
-import frc.robot.commands.EndEffector.IntakeCoral;
+import frc.robot.commands.EndEffector.GroundIntake;
 import frc.robot.commands.Groups.Climb;
 import frc.robot.commands.Groups.GroundCoralIntake;
 import frc.robot.commands.Groups.ScoreCoral;
@@ -114,7 +114,7 @@ public class RobotContainer {
 
         
         NamedCommands.registerCommand("ReefPosition", new ReefPosition(m_pivot));
-        NamedCommands.registerCommand("IntakeCoral", new IntakeCoral(m_endEffector));
+        NamedCommands.registerCommand("IntakeCoral", new GroundIntake(m_endEffector));
         NamedCommands.registerCommand("DropCoral", new DropCoral(m_endEffector));
         NamedCommands.registerCommand("ScoreCoral", new ScoreCoral(m_endEffector, m_pivot, m_telescope, m_led));
 

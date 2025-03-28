@@ -9,8 +9,10 @@ import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
+import com.ctre.phoenix6.signals.InvertedValue;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Telescope extends SubsystemBase{
@@ -22,21 +24,21 @@ public class Telescope extends SubsystemBase{
     private final int BACK_TELESCOPE_CAN_ID = 8;
 
     private final double CURRENT_LIMIT = 80;
-    private final double POSITION_TOLERANCE = 1;
+    private final double POSITION_TOLERANCE = 2;
     private double setpoint;
 
     // private final double GEAR_RATIO = 4.0/1.0;
 
     private final double kS = 0.25; 
-    private final double kV = 0.27;    
-    private final double kG = 0.1;
+    private final double kV = 0.08;    
+    private final double kG = 0.5;
     private final double kA = 0.02;
-    private final double kP = 2.5;
+    private final double kP = 0.7;
     private final double kI = 0;
-    private final double kD = 0.3;
+    private final double kD = 0;
 
-    private final double kCruiseVelocity = 120;
-    private final double kAcceleration = 120;
+    private final double kCruiseVelocity = 60;
+    private final double kAcceleration = 100;
     // private final double kJerk = 100;
 
     public Telescope(){
@@ -57,7 +59,7 @@ public class Telescope extends SubsystemBase{
         // config.Feedback.RotorToSensorRatio = GEAR_REDUCTION;
         config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
         // config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
-
+        config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
         config.Slot0.kS = kS;
         config.Slot0.kV = kV;
         config.Slot0.kA = kA;
@@ -100,5 +102,10 @@ public class Telescope extends SubsystemBase{
         double curPos = posSignal.getValue().in(Rotations);
 
         return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putBoolean("Telescope at setpoint", atSetpoint());
     }
 }
