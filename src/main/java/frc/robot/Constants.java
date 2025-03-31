@@ -27,9 +27,20 @@ public class Constants {
     public static final Rotation3d RIGHT_CAM_ROTATION = new Rotation3d(0, 
                                                                         Units.degreesToRadians(-18.7), 
                                                                         Units.degreesToRadians(160));
+
+    public static final Translation3d STATION_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(11.062), 
+                                                                        Units.inchesToMeters(-9.039),  
+                                                                        Units.inchesToMeters(7.066));
+
+    public static final Rotation3d STATION_CAM_ROTATION = new Rotation3d(0, 
+                                                                        Units.degreesToRadians(-145.0), 
+                                                                        Units.degreesToRadians(20));
+
+
                                                                         
     public static final Transform3d LEFT_CAM_TRANSFORM = new Transform3d(LEFT_CAM_TRANSLATION, LEFT_CAM_ROTATION);
     public static final Transform3d RIGHT_CAM_TRANSFORM = new Transform3d(RIGHT_CAM_TRANSLATION, RIGHT_CAM_ROTATION);
+    public static final Transform3d STATION_CAM_TRANSFORM = new Transform3d(STATION_CAM_TRANSLATION, STATION_CAM_ROTATION);
 
 
     public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
@@ -39,8 +50,8 @@ public class Constants {
         public static final double reefAngleDegrees = 90;
         public static final double reefIntermediateAngleDegrees = 86;
         public static final double stowAngleDegrees = 0;
-        public static final double climbAngleDegrees = 10;
-        public static final double stationAngleDegrees = 34.27;
+        public static final double climbAngleDegrees = -25;
+        public static final double stationAngleDegrees = 37;
         public static final double groundIntakeAngleDegrees = -23.5;
     }
     public static final class TelescopeConstants{
@@ -53,7 +64,10 @@ public class Constants {
     }
     public static final class WristConstants{
         public static final double stowAngleDegrees = 129.5;
-        public static final double stationAngleDegrees = 66.6;
+        public static final double stationAngleDegrees = 93.24;
         public static final double groundIntakeAngleDegrees = 55;
+        public static final double jamAngleDegrees = 90;
+        public static final double L4AngleDegrees = 80;
+        public static final double L3AngleDegrees = 90;
     }
 }
