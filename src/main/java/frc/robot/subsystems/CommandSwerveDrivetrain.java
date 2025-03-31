@@ -2,6 +2,7 @@ package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -31,6 +32,8 @@ import edu.wpi.first.wpilibj.simulation.RoboRioSim;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
+
+import org.photonvision.EstimatedRobotPose;
 
 import frc.robot.generated.TunerConstants.TunerSwerveDrivetrain;
 
@@ -281,7 +284,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
-        var visionEstLeft = vision.getEstimatedGlobalPoseLeft();
+        Optional<EstimatedRobotPose> visionEstLeft = vision.getEstimatedGlobalPoseLeft();
         visionEstLeft.ifPresent(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
@@ -292,7 +295,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 }
         );
 
-        var visionEstRight = vision.getEstimatedGlobalPoseRight();
+        Optional<EstimatedRobotPose> visionEstRight = vision.getEstimatedGlobalPoseRight();
         visionEstRight.ifPresent(
                 est -> {
                     // Change our trust in the measurement based on the tags we can see
@@ -302,6 +305,20 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                             est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
                 }
         );
+
+        Optional<EstimatedRobotPose> visionEstStation = vision.getEstimatedGlobalPoseStation();
+        visionEstStation.ifPresent(
+                est -> {
+                    // Change our trust in the measurement based on the tags we can see
+                    var estStdDevs = vision.getEstimationStdDevsStation();
+
+                    addVisionMeasurement(
+                            est.estimatedPose.toPose2d(), est.timestampSeconds, estStdDevs);
+                }
+        );
+
+
+
     }
 
     @Override
@@ -375,7 +392,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return AutoBuilder.pathfindToPose(
             pose,
             constraints,
-            1.0
+            2.0
                                         );
     }
 
