@@ -18,7 +18,7 @@ public class DropCoral extends Command{
     }
     @Override
     public boolean isFinished(){
-        if (m_debouncer.calculate(m_endEffector.getBeamBreakValue())){
+        if (m_debouncer.calculate(m_endEffector.getBackBeamBreakValue())){
             return true;
         }
         return false;
