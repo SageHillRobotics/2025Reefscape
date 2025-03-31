@@ -102,9 +102,9 @@ public class Vision extends SubsystemBase {
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseStation() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
-        for (var change : rightCam.getAllUnreadResults()) {
-            visionEst = photonPoseEstimatorRight.update(change);
-            updateEstimationStdDevsRight(visionEst, change.getTargets());
+        for (var change : stationCam.getAllUnreadResults()) {
+            visionEst = photonPoseEstimatorStation.update(change);
+            updateEstimationStdDevsStation(visionEst, change.getTargets());
 
         }
         return visionEst;
@@ -242,7 +242,7 @@ public class Vision extends SubsystemBase {
     }
 
     public Matrix<N3, N1> getEstimationStdDevsStation() {
-        return curStdDevsRight;
+        return curStdDevsStation;
     }
 
     public Field2d getSimDebugField() {
