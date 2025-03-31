@@ -43,11 +43,12 @@ public class Vision extends SubsystemBase {
     private VisionSystemSim visionSim;
     private PhotonCameraSim leftReefCameraSim;
     private PhotonCameraSim rightReefCameraSim;
+    private PhotonCameraSim stationCameraSim;
 
     public Vision() {
         leftCam = new PhotonCamera("Left_Reef_Cam");
         rightCam = new PhotonCamera("Right_Reef_Cam");
-        stationCam = new PhotonCamera("STATION_CAM");
+        stationCam = new PhotonCamera("Station_Cam");
 
         photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.LEFT_CAM_TRANSFORM);
         photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
@@ -71,12 +72,16 @@ public class Vision extends SubsystemBase {
 
             leftReefCameraSim = new PhotonCameraSim(leftCam, cameraProp);
             rightReefCameraSim = new PhotonCameraSim(rightCam, cameraProp);
+            stationCameraSim = new PhotonCameraSim(stationCam, cameraProp);
             // Add the simulated camera to view the targets on this simulated field.
             visionSim.addCamera(leftReefCameraSim, Constants.VisionConstants.LEFT_CAM_TRANSFORM);
             visionSim.addCamera(rightReefCameraSim, Constants.VisionConstants.RIGHT_CAM_TRANSFORM);
+            visionSim.addCamera(stationCameraSim, Constants.VisionConstants.STATION_CAM_TRANSFORM);
 
-            leftReefCameraSim.enableDrawWireframe(true);
-            rightReefCameraSim.enableDrawWireframe(true);
+
+            // leftReefCameraSim.enableDrawWireframe(true);
+            // rightReefCameraSim.enableDrawWireframe(true);
+            // stationCameraSim.enableDrawWireframe(true);
         }
     }
 
