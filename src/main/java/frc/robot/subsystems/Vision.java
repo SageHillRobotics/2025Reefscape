@@ -79,9 +79,9 @@ public class Vision extends SubsystemBase {
             visionSim.addCamera(stationCameraSim, Constants.VisionConstants.STATION_CAM_TRANSFORM);
 
 
-            // leftReefCameraSim.enableDrawWireframe(true);
-            // rightReefCameraSim.enableDrawWireframe(true);
-            // stationCameraSim.enableDrawWireframe(true);
+            leftReefCameraSim.enableDrawWireframe(true);
+            rightReefCameraSim.enableDrawWireframe(true);
+            stationCameraSim.enableDrawWireframe(true);
         }
     }
 
