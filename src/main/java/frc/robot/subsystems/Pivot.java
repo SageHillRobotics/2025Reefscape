@@ -38,18 +38,18 @@ public class Pivot extends SubsystemBase{
     private final double kV = 10; 
     private final double kG = 0.2;
     private final double kA = 0.08;
-    private final double kP = 48;
+    private final double kP = 50;
     private final double kI = 0;
     private final double kD = 0;
 
-    private final double kCruiseVelocity = 1;
-    private final double kAcceleration = 10;
+    private final double kCruiseVelocity = 2;
+    private final double kAcceleration = 5;
     private final double kJerk = 0;
 
     private final double CURRENT_LIMIT = 80;
 
     private double setpoint;
-    private final double POSITION_TOLERANCE = 3; //1 degree
+    private final double POSITION_TOLERANCE = 3; //3 degrees
 
     public Pivot(){
         rightPivot = new TalonFX(RIGHT_PIVOT_CAN_ID);
