@@ -8,7 +8,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.StaticBrake;
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.RelativeEncoder;
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
@@ -31,10 +31,10 @@ public class EndEffector extends SubsystemBase{
 
     private final SparkMax wristMotor;
 
-    private final RelativeEncoder wristEncoder;
+    private final AbsoluteEncoder wristEncoder;
     private final SparkClosedLoopController wristController;
 
-    private final double startingOffset = 129.5/360.0;
+    private final double zeroOffset = .5931;
 
     private final int WRIST_MOTOR_CAN_ID = 31;
     private final int HORIZONTAL_ROLLER_CAN_ID = 32;
@@ -46,22 +46,22 @@ public class EndEffector extends SubsystemBase{
     private final double maxVelocity = 0.5;
     private final double maxAcceleration = 0.5;
 
-    private final DigitalInput beamBreak;
-    private final int BEAM_BREAK_ID = 9;
+    private final DigitalInput frontBeamBreak;
+    private final DigitalInput backBeamBreak;
+
+    private final int FRONT_BEAM_BREAK_ID = 7;
+    private final int BACK_BEAM_BREAK_ID = 9;
     
 
-    private final double VERTICAL_ROLLER_GROUND_VOLTAGE = 0.5 * -12; //60% output
-    private final double HORIZONTAL_ROLLER_GROUND_VOLTAGE = 0.5 * -12;
+    private final double VERTICAL_ROLLER_GROUND_VOLTAGE = 0.6 * -12; //50% output
+    private final double HORIZONTAL_ROLLER_GROUND_VOLTAGE = 0.7 * -12;
 
     private final double VERTICAL_ROLLER_STATION_VOLTAGE = 0.3 * -12;
-    private final double HORIZONTAL_ROLLER_STATION_VOLTAGE = 0.3 * -12;
+    private final double HORIZONTAL_ROLLER_STATION_VOLTAGE = 0.35 * -12;
 
-    // private final double HOLD_SPEED = 0.01 * 12; //1% output
+    private final double INDEX_SPEED = 0.45 * -12;
+    private final double HOLD_SPEED = 0.05 * 12; //1% output
     private final double EJECT_SPEED = 0.5 * -12; //100% output
-
-    private final int ENCODER_COUNTS_PER_REV = 8192;
-    private final double ENCODER_TO_WRIST_RATIO = 1.0;
-    private final double WRIST_CONVERSION_FACTOR = 1.0/ENCODER_TO_WRIST_RATIO;
     
     private final double POSITION_TOLERANCE = 10/360.0;
 
@@ -75,21 +75,22 @@ public class EndEffector extends SubsystemBase{
         wristMotor.configure(configureWrist(new SparkMaxConfig()), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
         setpoint = -1;
 
-        wristEncoder = wristMotor.getAlternateEncoder();
-        wristEncoder.setPosition(startingOffset);
+        wristEncoder = wristMotor.getAbsoluteEncoder();
+        // wristEncoder.setPosition(startingOffset);
 
         wristController = wristMotor.getClosedLoopController();
         
-        beamBreak = new DigitalInput(BEAM_BREAK_ID);
+        frontBeamBreak = new DigitalInput(FRONT_BEAM_BREAK_ID);
+        backBeamBreak = new DigitalInput(BACK_BEAM_BREAK_ID);
     }
 
     public SparkMaxConfig configureWrist(SparkMaxConfig config){
         config.inverted(true);
         config.idleMode(IdleMode.kCoast);
-        config.alternateEncoder.positionConversionFactor(WRIST_CONVERSION_FACTOR);
-        config.alternateEncoder.countsPerRevolution(ENCODER_COUNTS_PER_REV);
-        config.alternateEncoder.inverted(false);
-        config.closedLoop.feedbackSensor(FeedbackSensor.kAlternateOrExternalEncoder);
+        config.closedLoop.feedbackSensor(FeedbackSensor.kAbsoluteEncoder);
+        config.absoluteEncoder.zeroCentered(true);
+        // config.absoluteEncoder.inverted(true);
+        config.absoluteEncoder.zeroOffset(zeroOffset);
         config.closedLoop.pid(kP, kI, kD);
         config.closedLoop.maxMotion
             .maxVelocity(maxVelocity)
@@ -119,18 +120,27 @@ public class EndEffector extends SubsystemBase{
         horizontalRoller.setControl(new VoltageOut(HORIZONTAL_ROLLER_STATION_VOLTAGE));
     }
 
+    public void setIndexSpeed(){
+        verticalRoller.setControl(new VoltageOut(INDEX_SPEED));
+    }
+
     public void indexBrake(){
         verticalRoller.setControl(new StaticBrake());
+        horizontalRoller.setControl(new StaticBrake());
     }
 
     public void setHoldSpeed(){
         // indexMotor.setControl(new VoltageOut(HOLD_SPEED));
         horizontalRoller.set(0);
-        verticalRoller.setControl(new StaticBrake());
+        verticalRoller.setControl(new VoltageOut(HOLD_SPEED));
     }
 
-    public boolean getBeamBreakValue(){
-        return beamBreak.get();
+    public boolean getFrontBeamBreakValue(){
+        return frontBeamBreak.get();
+    }
+
+    public boolean getBackBeamBreakValue(){
+        return backBeamBreak.get();
     }
 
     public double getStatorCurrent(){
@@ -161,7 +171,8 @@ public class EndEffector extends SubsystemBase{
 
     @Override
     public void periodic(){
-        SmartDashboard.putBoolean("Beam Break Value", getBeamBreakValue());
+        SmartDashboard.putBoolean("Front Beam Break Value", getFrontBeamBreakValue());
+        SmartDashboard.putBoolean("Back Beam Break Value", getBackBeamBreakValue());
         SmartDashboard.putNumber("Wrist Encoder Rotations", wristEncoder.getPosition());
         SmartDashboard.putNumber("Internal Wrist Rotations", wristMotor.getEncoder().getPosition());
     }
