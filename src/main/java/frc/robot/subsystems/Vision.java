@@ -29,10 +29,15 @@ public class Vision extends SubsystemBase {
     private AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2025ReefscapeWelded.loadAprilTagLayoutField();
     private PhotonCamera leftCam;
     private PhotonCamera rightCam;
+    private PhotonCamera stationCam;
     private PhotonPoseEstimator photonPoseEstimatorLeft;
     private PhotonPoseEstimator photonPoseEstimatorRight;
+    private PhotonPoseEstimator photonPoseEstimatorStation;
     private Matrix<N3, N1> curStdDevsLeft;
     private Matrix<N3, N1> curStdDevsRight;
+    private Matrix<N3, N1> curStdDevsStation;
+
+
 
     //Sim
     private VisionSystemSim visionSim;
@@ -42,12 +47,16 @@ public class Vision extends SubsystemBase {
     public Vision() {
         leftCam = new PhotonCamera("Left_Reef_Cam");
         rightCam = new PhotonCamera("Right_Reef_Cam");
+        stationCam = new PhotonCamera("STATION_CAM");
 
         photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.LEFT_CAM_TRANSFORM);
         photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         photonPoseEstimatorRight = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.RIGHT_CAM_TRANSFORM);
         photonPoseEstimatorRight.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+
+        photonPoseEstimatorStation = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.STATION_CAM_TRANSFORM);
+        photonPoseEstimatorStation.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         if (Robot.isSimulation()){
             visionSim = new VisionSystemSim("Vision Sim");
@@ -82,6 +91,16 @@ public class Vision extends SubsystemBase {
     }
 
     public Optional<EstimatedRobotPose> getEstimatedGlobalPoseRight() {
+        Optional<EstimatedRobotPose> visionEst = Optional.empty();
+        for (var change : rightCam.getAllUnreadResults()) {
+            visionEst = photonPoseEstimatorRight.update(change);
+            updateEstimationStdDevsRight(visionEst, change.getTargets());
+
+        }
+        return visionEst;
+    }
+
+    public Optional<EstimatedRobotPose> getEstimatedGlobalPoseStation() {
         Optional<EstimatedRobotPose> visionEst = Optional.empty();
         for (var change : rightCam.getAllUnreadResults()) {
             visionEst = photonPoseEstimatorRight.update(change);
@@ -173,11 +192,56 @@ public class Vision extends SubsystemBase {
         }
     }
 
+    private void updateEstimationStdDevsStation(Optional<EstimatedRobotPose> estimatedPose, List<PhotonTrackedTarget> targets) {
+        if (estimatedPose.isEmpty()) {
+            // No pose input. Default to single-tag std devs
+            curStdDevsStation = Constants.VisionConstants.kSingleTagStdDevs;
+
+        } else {
+            // Pose present. Start running Heuristic
+            var estStdDevs = Constants.VisionConstants.kSingleTagStdDevs;
+            int numTags = 0;
+            double avgDist = 0;
+
+            // Precalculation - see how many tags we found, and calculate an average-distance metric
+            for (var tgt : targets) {
+                var tagPose = photonPoseEstimatorStation.getFieldTags().getTagPose(tgt.getFiducialId());
+                if (tagPose.isEmpty()) continue;
+                numTags++;
+                avgDist +=
+                        tagPose
+                                .get()
+                                .toPose2d()
+                                .getTranslation()
+                                .getDistance(estimatedPose.get().estimatedPose.toPose2d().getTranslation());
+            }
+
+            if (numTags == 0) {
+                // No tags visible. Default to single-tag std devs
+                curStdDevsStation = Constants.VisionConstants.kSingleTagStdDevs;
+            } else {
+                // One or more tags visible, run the full heuristic.
+                avgDist /= numTags;
+                // Decrease std devs if multiple targets are visible
+                if (numTags > 1) estStdDevs = Constants.VisionConstants.kMultiTagStdDevs;
+                // Increase std devs based on (average) distance
+                if (numTags == 1 && avgDist > 4)
+                    estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+                else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
+                curStdDevsStation = estStdDevs;
+            }
+        }
+    }
+
     //separate later
     public Matrix<N3, N1> getEstimationStdDevsLeft() {
         return curStdDevsLeft;
     }
     public Matrix<N3, N1> getEstimationStdDevsRight() {
+        return curStdDevsRight;
+    }
+
+    public Matrix<N3, N1> getEstimationStdDevsStation() {
         return curStdDevsRight;
     }
 
