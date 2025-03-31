@@ -2,7 +2,6 @@ package frc.robot.commands.Align;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
-import static edu.wpi.first.units.Units.MetersPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
@@ -12,7 +11,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 
@@ -20,7 +18,8 @@ public class PreciseAlign extends Command {
     private final CommandSwerveDrivetrain drivetrain;
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 
-    private final double maxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    private final double maxSpeed = 2;
+
     private final double maxAngularSpeed = 0.75;
 
     // private final Pose2d targetPose;
@@ -47,8 +46,8 @@ public class PreciseAlign extends Command {
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
 
-        xPID = new PIDController(5, 0.0, 0.1);
-        yPID = new PIDController(5, 0.0, 0.1);
+        xPID = new PIDController(7, 0.0, 0.1);
+        yPID = new PIDController(7, 0.0, 0.1);
         thetaPID = new PIDController(5, 0.0, 0.1);
 
         xPID.setTolerance(kXTolerance);
