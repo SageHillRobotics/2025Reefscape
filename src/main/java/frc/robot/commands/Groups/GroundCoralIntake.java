@@ -4,7 +4,9 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.EndEffector.GroundIntake;
+import frc.robot.commands.EndEffector.IndexCoral;
 import frc.robot.commands.EndEffector.MoveWristToGround;
+import frc.robot.commands.EndEffector.WristJam;
 import frc.robot.commands.Pivot.GroundPosition;
 import frc.robot.commands.Telescope.MoveToGround;
 import frc.robot.subsystems.EndEffector;
@@ -25,6 +27,8 @@ public class GroundCoralIntake extends SequentialCommandGroup{
         
         addCommands(new ParallelCommandGroup(new MoveWristToGround(m_endEffector), new MoveToGround(m_telescope)));
         addCommands(new ParallelDeadlineGroup(new GroundIntake(m_endEffector), new GroundPosition(m_pivot), m_led.blinkPurple()));
+        addCommands(new WristJam(m_endEffector));
+        addCommands(new IndexCoral(m_endEffector));
         // addCommands(new ParallelDeadlineGroup(new ReefPosition(m_pivot), m_led.blinkGreen()));
         // addCommands(new ParallelCommandGroup(m_led.blinkGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
     }
