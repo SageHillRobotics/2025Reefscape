@@ -19,6 +19,7 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Current;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -48,28 +49,36 @@ public class EndEffector extends SubsystemBase{
 
     private final DigitalInput frontBeamBreak;
     private final DigitalInput backBeamBreak;
+    private final Debouncer debouncer = new Debouncer(0.15, Debouncer.DebounceType.kBoth);
+
 
     private final int FRONT_BEAM_BREAK_ID = 7;
     private final int BACK_BEAM_BREAK_ID = 9;
-    
 
-    private final double VERTICAL_ROLLER_GROUND_VOLTAGE = 0.6 * -12; //50% output
-    private final double HORIZONTAL_ROLLER_GROUND_VOLTAGE = 0.7 * -12;
+    private final double VERTICAL_ROLLER_GROUND_VOLTAGE = 0.4 * -12; //50% output
+    private final double HORIZONTAL_ROLLER_GROUND_VOLTAGE = 0.4 * -12;
 
     private final double VERTICAL_ROLLER_STATION_VOLTAGE = 0.3 * -12;
     private final double HORIZONTAL_ROLLER_STATION_VOLTAGE = 0.35 * -12;
 
-    private final double INDEX_SPEED = 0.45 * -12;
+    private final double HORIZONTAL_ROLLER_INDEX_VOLTAGE = 0.25 * -12;
+    private final double VERTICAL_ROLLER_INDEX_VOLTAGE = 0.75 * -12;
+
     private final double HOLD_SPEED = 0.05 * 12; //1% output
     private final double EJECT_SPEED = 0.5 * -12; //100% output
     
     private final double POSITION_TOLERANCE = 10/360.0;
+
+    private final double CURRENT_LIMIT = 80;
 
     private double setpoint;
 
     public EndEffector(){
         verticalRoller = new TalonFX(VERTICAL_ROLLER_CAN_ID);
         horizontalRoller = new TalonFX(HORIZONTAL_ROLLER_CAN_ID);
+
+        verticalRoller.getConfigurator().apply(new TalonFXConfiguration().withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT)));
+        horizontalRoller.getConfigurator().apply(new TalonFXConfiguration().withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT)));
 
         wristMotor = new SparkMax(WRIST_MOTOR_CAN_ID, MotorType.kBrushless);
         wristMotor.configure(configureWrist(new SparkMaxConfig()), ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -121,7 +130,12 @@ public class EndEffector extends SubsystemBase{
     }
 
     public void setIndexSpeed(){
-        verticalRoller.setControl(new VoltageOut(INDEX_SPEED));
+        horizontalRoller.setControl(new VoltageOut(HORIZONTAL_ROLLER_INDEX_VOLTAGE));
+        verticalRoller.setControl(new VoltageOut(VERTICAL_ROLLER_INDEX_VOLTAGE));
+    }
+
+    public void feedUp(){
+        verticalRoller.setControl(new VoltageOut(2));
     }
 
     public void indexBrake(){
@@ -131,7 +145,7 @@ public class EndEffector extends SubsystemBase{
 
     public void setHoldSpeed(){
         // indexMotor.setControl(new VoltageOut(HOLD_SPEED));
-        horizontalRoller.set(0);
+        horizontalRoller.setControl(new StaticBrake());
         verticalRoller.setControl(new VoltageOut(HOLD_SPEED));
     }
 
@@ -143,12 +157,17 @@ public class EndEffector extends SubsystemBase{
         return backBeamBreak.get();
     }
 
-    public double getStatorCurrent(){
+    public double getFrontStatorCurrent(){
+        StatusSignal<Current> statorCurrentSignal = horizontalRoller.getStatorCurrent();
+        return statorCurrentSignal.getValue().in(Amps);
+    }
+
+    public double getBackStatorCurrent(){
         StatusSignal<Current> statorCurrentSignal = verticalRoller.getStatorCurrent();
         return statorCurrentSignal.getValue().in(Amps);
     }
 
-    public double getSupplyCurrent(){
+    public double getBackSupplyCurrent(){
         StatusSignal<Current> supplyCurrentSignal = verticalRoller.getSupplyCurrent();
         return supplyCurrentSignal.getValue().in(Amps);
     }
@@ -167,6 +186,10 @@ public class EndEffector extends SubsystemBase{
         double curPos = wristEncoder.getPosition();
 
         return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
+    }
+
+    public boolean isJammed(){
+        return debouncer.calculate(!getFrontBeamBreakValue() && getFrontStatorCurrent() > 80);
     }
 
     @Override

@@ -6,7 +6,7 @@ import frc.robot.subsystems.EndEffector;
 
 public class GroundIntake extends Command{
     private final EndEffector m_endEffector;
-    private final Debouncer m_debouncer = new Debouncer(0.75, Debouncer.DebounceType.kBoth);
+    private final Debouncer m_debouncer = new Debouncer(0.35, Debouncer.DebounceType.kBoth);
     private final Debouncer m_debouncer_back = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
 
 
