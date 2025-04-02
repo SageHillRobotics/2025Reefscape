@@ -44,6 +44,17 @@ public class LED extends SubsystemBase{
         pattern.applyTo(m_ledBuffer);
         // m_led.setData(m_ledBuffer);
     }
+    public void setBlinkRed(){
+        LEDPattern purple = LEDPattern.solid(Color.kRed);
+        LEDPattern pattern = purple.blink(Units.Seconds.of(0.1));
+        pattern.applyTo(m_ledBuffer);
+    }
+
+    public void setBlinkOrange(){
+        LEDPattern purple = LEDPattern.solid(Color.kOrange);
+        LEDPattern pattern = purple.blink(Units.Seconds.of(0.1));
+        pattern.applyTo(m_ledBuffer);
+    }
 
     public Command setOff(){
         return (run(() -> LEDPattern.solid(Color.kBlack).applyTo(m_ledBuffer)));
@@ -57,6 +68,14 @@ public class LED extends SubsystemBase{
     public Command blinkPurple(){
         return run(() -> setBlinkPurple());
 
+    }
+
+    public Command blinkRed(){
+        return run(() -> setBlinkRed());
+    }
+
+    public Command blinkOrange(){
+        return run(() -> setBlinkOrange());
     }
 
     public Command solidGreen(){
