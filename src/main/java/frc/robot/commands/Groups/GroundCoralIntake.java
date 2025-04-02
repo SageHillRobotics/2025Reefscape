@@ -34,6 +34,8 @@ public class GroundCoralIntake extends SequentialCommandGroup{
         // addCommands(new ConditionalCommand(new WristJam(m_endEffector), new InstantCommand(), () -> m_endEffector.isJammed()));
         addCommands(new IndexCoralStageOne(m_endEffector));
         addCommands(new IndexCoralStageTwo(m_endEffector));
+        addCommands(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
+        addCommands(m_led.solidGreen());
         // addCommands(new ParallelDeadlineGroup(new ReefPosition(m_pivot), m_led.blinkGreen()));
         // addCommands(new ParallelCommandGroup(m_led.blinkGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
     }

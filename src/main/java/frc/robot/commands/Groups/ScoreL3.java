@@ -1,8 +1,10 @@
 package frc.robot.commands.Groups;
 
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Pivot;
-import frc.robot.commands.EndEffector.MoveWristToGround;
+import frc.robot.commands.EndEffector.MoveWristToIntermediate;
 import frc.robot.commands.EndEffector.MoveWristToL3;
 import frc.robot.commands.Pivot.ReefPosition;
 import frc.robot.commands.Telescope.MoveToL3;
@@ -14,10 +16,9 @@ public class ScoreL3 extends SequentialCommandGroup{
     public ScoreL3(EndEffector m_endEffector, Pivot m_pivot, Telescope m_telescope, LED m_led){
         addRequirements(m_endEffector, m_pivot, m_telescope);
         
-        addCommands(new MoveWristToGround(m_endEffector));
-        addCommands(new ReefPosition(m_pivot));
-        addCommands(new MoveToL3(m_telescope));
-        addCommands(new MoveWristToL3(m_endEffector));
+        addCommands(new ParallelCommandGroup(new MoveWristToIntermediate(m_endEffector), new ReefPosition(m_pivot)));
+        addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(new MoveToL3(m_telescope), new MoveWristToL3(m_endEffector)), m_led.blinkRed()));
+        addCommands(m_led.solidGreen());
 
     }
 }
