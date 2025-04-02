@@ -12,7 +12,7 @@ public class MoveWristToL4 extends Command{
     }
     @Override
     public void initialize(){
-        m_endEffector.wristToAngle(Constants.WristConstants.groundIntakeAngleDegrees);
+        m_endEffector.wristToAngle(Constants.WristConstants.L4AngleDegrees);
     }
 
     @Override
