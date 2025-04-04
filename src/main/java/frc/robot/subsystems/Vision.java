@@ -48,7 +48,7 @@ public class Vision extends SubsystemBase {
     public Vision() {
         leftCam = new PhotonCamera("Left_Reef_Cam");
         rightCam = new PhotonCamera("Right_Reef_Cam");
-        stationCam = new PhotonCamera("Station_Cam");
+        stationCam = new PhotonCamera("Coral_Station_Cam");
 
         photonPoseEstimatorLeft = new PhotonPoseEstimator(aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, Constants.VisionConstants.LEFT_CAM_TRANSFORM);
         photonPoseEstimatorLeft.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);

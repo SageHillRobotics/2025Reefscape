@@ -13,7 +13,7 @@ public class AutoAlign extends SequentialCommandGroup{
 
         this.setpointManager = new SetpointManager();
         addRequirements(drivetrain);
-        addCommands(new RoughAlign(drivetrain, setpointManager, position + "1"));
+        addCommands(new RoughAlign(drivetrain, setpointManager, position));
         addCommands(new PreciseAlign(drivetrain, setpointManager, position));
         addCommands(new InstantCommand(() -> drivetrain.applyRequest(() -> new SwerveRequest.SwerveDriveBrake())));
     }

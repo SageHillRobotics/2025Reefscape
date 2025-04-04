@@ -17,6 +17,7 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Pivot extends SubsystemBase{
@@ -37,7 +38,7 @@ public class Pivot extends SubsystemBase{
     private final double kS = 0.14;
     private final double kV = 10; 
     private final double kG = 0.2;
-    private final double kA = 0.08;
+    private final double kA = 0.0;
     private final double kP = 50;
     private final double kI = 0;
     private final double kD = 0;
@@ -141,5 +142,10 @@ public class Pivot extends SubsystemBase{
         double curPos = posSignal.getValue().in(Degrees);
 
         return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
+    }
+
+    @Override
+    public void periodic(){
+        SmartDashboard.putNumber("Pivot Angle Degrees", getAngleDegrees());
     }
 }

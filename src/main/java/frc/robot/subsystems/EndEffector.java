@@ -56,15 +56,15 @@ public class EndEffector extends SubsystemBase{
     private final int BACK_BEAM_BREAK_ID = 9;
 
     private final double VERTICAL_ROLLER_GROUND_VOLTAGE = 0.4 * -12; //50% output
-    private final double HORIZONTAL_ROLLER_GROUND_VOLTAGE = 0.4 * -12;
+    private final double HORIZONTAL_ROLLER_GROUND_VOLTAGE = 0.8 * -12;
 
     private final double VERTICAL_ROLLER_STATION_VOLTAGE = 0.3 * -12;
-    private final double HORIZONTAL_ROLLER_STATION_VOLTAGE = 0.35 * -12;
+    private final double HORIZONTAL_ROLLER_STATION_VOLTAGE = 0.5 * -12;
 
     private final double HORIZONTAL_ROLLER_INDEX_VOLTAGE = 0.25 * -12;
     private final double VERTICAL_ROLLER_INDEX_VOLTAGE = 0.75 * -12;
 
-    private final double HOLD_SPEED = 0.05 * 12; //1% output
+    private final double HOLD_SPEED = 0.02 * 12; //1% output
     private final double EJECT_SPEED = 0.5 * -12; //100% output
     
     private final double POSITION_TOLERANCE = 10/360.0;
@@ -135,7 +135,7 @@ public class EndEffector extends SubsystemBase{
     }
 
     public void feedUp(){
-        verticalRoller.setControl(new VoltageOut(2));
+        verticalRoller.setControl(new VoltageOut(1));
     }
 
     public void indexBrake(){
@@ -190,6 +190,10 @@ public class EndEffector extends SubsystemBase{
 
     public boolean isJammed(){
         return debouncer.calculate(!getFrontBeamBreakValue() && getFrontStatorCurrent() > 80);
+    }
+
+    public boolean hasCoral(){
+        return !getFrontBeamBreakValue() && !getBackBeamBreakValue();
     }
 
     @Override

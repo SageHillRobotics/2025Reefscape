@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.commands.EndEffector.DropCoral;
-import frc.robot.commands.EndEffector.GroundIntake;
 import frc.robot.commands.Groups.Climb;
 import frc.robot.commands.Groups.GroundCoralIntake;
 import frc.robot.commands.Groups.ScoreCoral;
@@ -47,7 +46,7 @@ public class RobotContainer {
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.07).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
+            .withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.07) // Add a 10% deadband
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
     // private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
     // private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
@@ -76,10 +75,13 @@ public class RobotContainer {
     private final Trigger sourceCoralIntake = driver.button(4);
     private final Trigger stow = driver.button(11);
 
-    private final Trigger ledTest = driver.button(8);
+    private final Trigger clearHighAlgae = driver.button(8);
 
     private final Trigger sourceLeftLineUp = auxButtonBoard.button(1);
     private final Trigger sourceRightLineUp = auxButtonBoard.button(2);
+
+    private final Trigger aTest = driver.povLeft();
+    private final Trigger bTest = driver.povRight();
 
     private final Trigger aLineUp = buttonBoard.button(1);
     private final Trigger bLineUp = buttonBoard.button(2);
@@ -114,7 +116,7 @@ public class RobotContainer {
 
         
         NamedCommands.registerCommand("ReefPosition", new ReefPosition(m_pivot));
-        NamedCommands.registerCommand("IntakeCoral", new GroundIntake(m_endEffector));
+        NamedCommands.registerCommand("IntakeCoral", new SourceCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
         NamedCommands.registerCommand("DropCoral", new DropCoral(m_endEffector));
         NamedCommands.registerCommand("ScoreCoral", new ScoreCoral(m_endEffector, m_pivot, m_telescope, m_led));
 
@@ -153,21 +155,24 @@ public class RobotContainer {
         );
 
         // lineUp.toggleOnTrue(drivetrain.pathFind());
-        sourceLeftLineUp.whileTrue(new AutoAlign(drivetrain, "sourceLeft"));
-        sourceRightLineUp.whileTrue(new AutoAlign(drivetrain, "sourceRight"));
+        sourceLeftLineUp.onTrue(new AutoAlign(drivetrain, "sourceLeft"));
+        sourceRightLineUp.onTrue(new AutoAlign(drivetrain, "sourceRight"));
 
-        aLineUp.whileTrue(new AutoAlign(drivetrain, "A"));
-        bLineUp.whileTrue(new AutoAlign(drivetrain, "B"));
-        cLineUp.whileTrue(new AutoAlign(drivetrain, "C"));
-        dLineUp.whileTrue(new AutoAlign(drivetrain, "D"));
-        eLineUp.whileTrue(new AutoAlign(drivetrain, "E"));
-        fLineUp.whileTrue(new AutoAlign(drivetrain, "F"));
-        gLineUp.whileTrue(new AutoAlign(drivetrain, "G"));
-        hLineUp.whileTrue(new AutoAlign(drivetrain, "H"));
-        iLineUp.whileTrue(new AutoAlign(drivetrain, "I"));
-        jLineUp.whileTrue(new AutoAlign(drivetrain, "J"));
-        kLineUp.whileTrue(new AutoAlign(drivetrain, "K"));
-        lLineUp.whileTrue(new AutoAlign(drivetrain, "L"));
+        aTest.onTrue(new AutoAlign(drivetrain, "A"));
+        bTest.onTrue(new AutoAlign(drivetrain, "B"));
+
+        aLineUp.onTrue(new AutoAlign(drivetrain, "A"));
+        bLineUp.onTrue(new AutoAlign(drivetrain, "B"));
+        cLineUp.onTrue(new AutoAlign(drivetrain, "C"));
+        dLineUp.onTrue(new AutoAlign(drivetrain, "D"));
+        eLineUp.onTrue(new AutoAlign(drivetrain, "E"));
+        fLineUp.onTrue(new AutoAlign(drivetrain, "F"));
+        gLineUp.onTrue(new AutoAlign(drivetrain, "G"));
+        hLineUp.onTrue(new AutoAlign(drivetrain, "H"));
+        iLineUp.onTrue(new AutoAlign(drivetrain, "I"));
+        jLineUp.onTrue(new AutoAlign(drivetrain, "J"));
+        kLineUp.onTrue(new AutoAlign(drivetrain, "K"));
+        lLineUp.onTrue(new AutoAlign(drivetrain, "L"));
 
         zeroGyro.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldCentric()));
 
@@ -178,12 +183,12 @@ public class RobotContainer {
 
         score.onTrue(new ScoreCoral(m_endEffector, m_pivot, m_telescope, m_led));
 
-        sourceCoralIntake.onTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
+        sourceCoralIntake.toggleOnTrue(new SourceCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
         groundIntakeCoral.toggleOnTrue(new GroundCoralIntake(m_endEffector, m_led, m_pivot, m_telescope));
 
         stow.onTrue(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
 
-        ledTest.onTrue(new Climb(m_endEffector, m_pivot, m_telescope, m_led));
+        clearHighAlgae.onTrue(new Climb(m_endEffector, m_pivot, m_telescope, m_led));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

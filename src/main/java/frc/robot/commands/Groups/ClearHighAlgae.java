@@ -14,11 +14,11 @@ import frc.robot.subsystems.LED;
 import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Telescope;
 
-public class SourceCoralIntake extends SequentialCommandGroup{
+public class ClearHighAlgae extends SequentialCommandGroup{
     // private final EndEffector m_endEffector;
     // private final LED m_led;
     // private final Pivot m_pivot;
-    public SourceCoralIntake(EndEffector m_endEffector, LED m_led, Pivot m_pivot, Telescope m_telescope){
+    public ClearHighAlgae(EndEffector m_endEffector, LED m_led, Pivot m_pivot, Telescope m_telescope){
         // this.m_endEffector = m_endEffector;
         // this.m_led = m_led;
         // this.m_pivot = m_pivot;
@@ -27,7 +27,5 @@ public class SourceCoralIntake extends SequentialCommandGroup{
         
         addCommands(new ParallelCommandGroup(new MoveWristToStation(m_endEffector), new MoveToStation(m_telescope)));
         addCommands(new ParallelDeadlineGroup(new StationIntake(m_endEffector), new StationPosition(m_pivot), m_led.blinkOrange()));
-        addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(new IndexCoralStageOne(m_endEffector), new IndexCoralStageTwo(m_endEffector)), m_led.blinkRed()));
-        addCommands(new ParallelDeadlineGroup(new Stow(m_endEffector, m_pivot, m_telescope, m_led), m_led.blinkGreen()));
     }
 }

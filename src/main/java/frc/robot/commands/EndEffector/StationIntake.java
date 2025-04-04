@@ -7,7 +7,7 @@ import frc.robot.subsystems.EndEffector;
 public class StationIntake extends Command{
     private final EndEffector m_endEffector;
     private final Debouncer m_debouncer = new Debouncer(0.25, Debouncer.DebounceType.kBoth);
-    private final Debouncer m_debouncer_back = new Debouncer(0.1, Debouncer.DebounceType.kBoth);
+    // private final Debouncer m_debouncer_back = new Debouncer(0.01, Debouncer.DebounceType.kBoth);
 
 
     public StationIntake(EndEffector m_endEffector){
@@ -20,7 +20,7 @@ public class StationIntake extends Command{
     }
     @Override
     public boolean isFinished(){
-        if (m_debouncer.calculate(m_endEffector.getFrontBeamBreakValue() == false) || m_debouncer_back.calculate(!m_endEffector.getBackBeamBreakValue())){
+        if (m_debouncer.calculate(m_endEffector.getFrontBeamBreakValue() == false) || (!m_endEffector.getBackBeamBreakValue())){
             return true;
         }
         return false;

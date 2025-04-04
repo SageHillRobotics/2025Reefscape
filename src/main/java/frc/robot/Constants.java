@@ -28,12 +28,12 @@ public class Constants {
                                                                         Units.degreesToRadians(-18.7), 
                                                                         Units.degreesToRadians(160));
 
-    public static final Translation3d STATION_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(11.062), 
-                                                                        Units.inchesToMeters(-9.039),  
-                                                                        Units.inchesToMeters(7.066));
+    public static final Translation3d STATION_CAM_TRANSLATION = new Translation3d(Units.inchesToMeters(10.497), 
+                                                                        Units.inchesToMeters(-11.878),  
+                                                                        Units.inchesToMeters(9.104));
 
     public static final Rotation3d STATION_CAM_ROTATION = new Rotation3d(0, 
-                                                                        Units.degreesToRadians(-145.0), 
+                                                                        Units.degreesToRadians(-18.7), 
                                                                         Units.degreesToRadians(20));
 
 
@@ -52,22 +52,28 @@ public class Constants {
         public static final double stowAngleDegrees = 40;
         public static final double climbAngleDegrees = -25;
         public static final double stationAngleDegrees = 37;
-        public static final double groundIntakeAngleDegrees = -24.0822; //-0.066895
+        public static final double groundIntakeAngleDegrees = -25.0822; //-0.066895
+        public static final double clearHighAlgaeAngleDegrees = 50;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;
         public static final double sourceRotations = 0;
-        public static final double groundRotations = 0.25; //0.786621
-        public static final double L2Rotations = 1.5;
-        public static final double L3Rotations = 9.7;
-        public static final double L4Rotations = 21;
+        public static final double groundRotations = 0.5; //0.786621
+        public static final double L2Rotations = 0;
+        public static final double L3Rotations = 5.986;
+        public static final double L4Rotations = 18;
+        public static final double clearHighAlgaeRotations = 6;
     }
     public static final class WristConstants{
+        public static final double intermediateAngleDegrees = 0;
         public static final double stowAngleDegrees = 129.5;
-        public static final double stationAngleDegrees = 93.24;
-        public static final double groundIntakeAngleDegrees = 68; //0.175
+        public static final double stowAngleWithCoralDegrees = 90;
+        public static final double stationAngleDegrees = 87;
+        public static final double groundIntakeAngleDegrees = 70; //0.175
         public static final double jamAngleDegrees = 90;
-        public static final double L4AngleDegrees = 80;
-        public static final double L3AngleDegrees = 90;
+        public static final double L4AngleDegrees = 45;
+        public static final double L3AngleDegrees = 38.52;
+        public static final double l2AngleDegrees = 58.68;
+        public static final double clearHighAlgaeAngleDegrees = 90;
     }
 }

@@ -5,13 +5,26 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "3CoralBottom.0"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "3CoralBottom.0"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "ScoreL2"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -67,7 +80,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -123,7 +136,7 @@
           }
         },
         {
-          "type": "race",
+          "type": "parallel",
           "data": {
             "commands": [
               {

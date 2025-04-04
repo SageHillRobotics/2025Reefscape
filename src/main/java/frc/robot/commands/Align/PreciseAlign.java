@@ -46,8 +46,8 @@ public class PreciseAlign extends Command {
         this.setpointManager = setpointManager;
         this.targetKey = targetKey;
 
-        xPID = new PIDController(7, 0.0, 0.1);
-        yPID = new PIDController(7, 0.0, 0.1);
+        xPID = new PIDController(6, 0.0, 0.1);
+        yPID = new PIDController(6, 0.0, 0.1);
         thetaPID = new PIDController(5, 0.0, 0.1);
 
         xPID.setTolerance(kXTolerance);
@@ -92,5 +92,6 @@ public class PreciseAlign extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        drivetrain.setControl(drive.withVelocityX(0).withVelocityY(0).withRotationalRate(0));
     }
 }

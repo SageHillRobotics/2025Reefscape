@@ -1,7 +1,5 @@
 package frc.robot.commands.Groups;
 
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -18,25 +16,13 @@ import frc.robot.subsystems.Pivot;
 import frc.robot.subsystems.Telescope;
 
 public class GroundCoralIntake extends SequentialCommandGroup{
-    // private final EndEffector m_endEffector;
-    // private final LED m_led;
-    // private final Pivot m_pivot;
     public GroundCoralIntake(EndEffector m_endEffector, LED m_led, Pivot m_pivot, Telescope m_telescope){
-        // this.m_endEffector = m_endEffector;
-        // this.m_led = m_led;
-        // this.m_pivot = m_pivot;
-
         addRequirements(m_endEffector, m_led, m_pivot);
         
         addCommands(new ParallelCommandGroup(new MoveWristToGround(m_endEffector), new MoveToGround(m_telescope)));
         addCommands(new ParallelDeadlineGroup(new GroundIntake(m_endEffector), new GroundPosition(m_pivot), m_led.blinkPurple()));
         addCommands(new WristJam(m_endEffector));
-        // addCommands(new ConditionalCommand(new WristJam(m_endEffector), new InstantCommand(), () -> m_endEffector.isJammed()));
-        addCommands(new IndexCoralStageOne(m_endEffector));
-        addCommands(new IndexCoralStageTwo(m_endEffector));
-        addCommands(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
-        addCommands(m_led.solidGreen());
-        // addCommands(new ParallelDeadlineGroup(new ReefPosition(m_pivot), m_led.blinkGreen()));
-        // addCommands(new ParallelCommandGroup(m_led.blinkGreen(), new InstantCommand(() -> m_pivot.movetoAngle(0))));    
+        addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(new IndexCoralStageOne(m_endEffector), new IndexCoralStageTwo(m_endEffector)), m_led.blinkRed()));
+        addCommands(new ParallelDeadlineGroup(new Stow(m_endEffector, m_pivot, m_telescope, m_led), m_led.blinkGreen()));
     }
 }

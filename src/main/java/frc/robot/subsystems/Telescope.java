@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.units.measure.Angle;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -20,9 +21,11 @@ public class Telescope extends SubsystemBase{
 
     private final TalonFX frontTelescope;
     private final TalonFX backTelescope;
+    private final DigitalInput limitSwitch;
 
     private final int FRONT_TELESCOPE_CAN_ID = 9;
     private final int BACK_TELESCOPE_CAN_ID = 8;
+    private final int LIMIT_SWITCH_ID = 5;
 
     private final double CURRENT_LIMIT = 80;
     private final double POSITION_TOLERANCE = 2;
@@ -34,17 +37,18 @@ public class Telescope extends SubsystemBase{
     private final double kV = 0.08;    
     private final double kG = 0.45;
     private final double kA = 0.02;
-    private final double kP = 2.5;
+    private final double kP = 3.5;
     private final double kI = 0;
     private final double kD = 0.3;
 
-    private final double kCruiseVelocity = 50;
-    private final double kAcceleration = 40;
+    private final double kCruiseVelocity = 100;
+    private final double kAcceleration = 100;
     // private final double kJerk = 100;
 
     public Telescope(){
         frontTelescope = new TalonFX(FRONT_TELESCOPE_CAN_ID);
         backTelescope = new TalonFX(BACK_TELESCOPE_CAN_ID);
+        limitSwitch = new DigitalInput(LIMIT_SWITCH_ID);
 
         frontTelescope.getConfigurator().apply(configureFront(new TalonFXConfiguration()));
         backTelescope.getConfigurator().apply(configureBack(new TalonFXConfiguration()));
@@ -61,7 +65,7 @@ public class Telescope extends SubsystemBase{
         config.withCurrentLimits(new CurrentLimitsConfigs().withStatorCurrentLimit(CURRENT_LIMIT));
         // config.Feedback.SensorToMechanismRatio = GEAR_RATIO;
         config.MotorOutput.Inverted = InvertedValue.Clockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        config.MotorOutput.NeutralMode = NeutralModeValue.Coast;
         config.Slot0.kS = kS;
         config.Slot0.kV = kV;
         config.Slot0.kA = kA;
@@ -106,8 +110,17 @@ public class Telescope extends SubsystemBase{
         return Math.abs(curPos - setpoint) < POSITION_TOLERANCE;
     }
 
+    public boolean getLimitSwitch(){
+        return limitSwitch.get();
+    }
+
     @Override
     public void periodic(){
         SmartDashboard.putBoolean("Telescope at setpoint", atSetpoint());
+        SmartDashboard.putNumber("Telescope Rotations", getPosition());
+        SmartDashboard.putBoolean("Limit Switch", getLimitSwitch());
+        if (!getLimitSwitch()){
+            frontTelescope.setPosition(0);
+        }
     }
 }

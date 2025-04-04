@@ -18,6 +18,5 @@ public class ScoreL2 extends SequentialCommandGroup{
         
         addCommands(new ParallelCommandGroup(new MoveWristToIntermediate(m_endEffector), new ReefPosition(m_pivot)));
         addCommands(new ParallelDeadlineGroup(new SequentialCommandGroup(new MoveToL2(m_telescope), new MoveWristToL3(m_endEffector)), m_led.blinkRed()));
-        addCommands(m_led.solidGreen());
     }
 }

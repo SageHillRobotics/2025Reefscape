@@ -7,11 +7,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.0"
+            "pathName": "3CoralMid.0"
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -23,7 +23,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignI"
+                  "name": "AlignG"
                 }
               }
             ]
@@ -38,7 +38,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.1"
+            "pathName": "3CoralMid.1"
           }
         },
         {
@@ -54,7 +54,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignSourceLeft"
+                  "name": "AlignSourceRight"
                 }
               }
             ]
@@ -63,11 +63,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.2"
+            "pathName": "3CoralMid.2"
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -79,7 +79,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignJ"
+                  "name": "AlignE"
                 }
               }
             ]
@@ -94,7 +94,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.3"
+            "pathName": "3CoralMid.3"
           }
         },
         {
@@ -110,7 +110,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignSourceLeft"
+                  "name": "AlignSourceRight"
                 }
               }
             ]
@@ -119,11 +119,11 @@
         {
           "type": "path",
           "data": {
-            "pathName": "3CoralTop2.4"
+            "pathName": "3CoralMid.4"
           }
         },
         {
-          "type": "deadline",
+          "type": "parallel",
           "data": {
             "commands": [
               {
@@ -135,7 +135,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "AlignK"
+                  "name": "AlignD"
                 }
               }
             ]
