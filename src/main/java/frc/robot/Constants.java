@@ -52,28 +52,28 @@ public class Constants {
         public static final double stowAngleDegrees = 40;
         public static final double climbAngleDegrees = -25;
         public static final double stationAngleDegrees = 37;
-        public static final double groundIntakeAngleDegrees = -25.0822; //-0.066895
-        public static final double clearHighAlgaeAngleDegrees = 50;
+        public static final double groundIntakeAngleDegrees = -24.0822; //-0.066895
+        public static final double clearHighAlgaeAngleDegrees = 37;
     }
     public static final class TelescopeConstants{
         public static final double stowRotations = 0.25;
         public static final double sourceRotations = 0;
-        public static final double groundRotations = 0.5; //0.786621
+        public static final double groundRotations = 0.2; //0.786621
         public static final double L2Rotations = 0;
         public static final double L3Rotations = 5.986;
         public static final double L4Rotations = 18;
-        public static final double clearHighAlgaeRotations = 6;
+        public static final double clearHighAlgaeRotations = 4;
     }
     public static final class WristConstants{
         public static final double intermediateAngleDegrees = 0;
         public static final double stowAngleDegrees = 129.5;
         public static final double stowAngleWithCoralDegrees = 90;
         public static final double stationAngleDegrees = 87;
-        public static final double groundIntakeAngleDegrees = 70; //0.175
+        public static final double groundIntakeAngleDegrees = 71; //0.175
         public static final double jamAngleDegrees = 90;
-        public static final double L4AngleDegrees = 45;
+        public static final double L4AngleDegrees = 50;
         public static final double L3AngleDegrees = 38.52;
         public static final double l2AngleDegrees = 58.68;
-        public static final double clearHighAlgaeAngleDegrees = 90;
+        public static final double clearHighAlgaeAngleDegrees = 120;
     }
 }

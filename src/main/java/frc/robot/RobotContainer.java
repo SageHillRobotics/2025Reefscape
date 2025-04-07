@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.commands.Align.AutoAlign;
 import frc.robot.commands.EndEffector.DropCoral;
+import frc.robot.commands.Groups.ClearHighAlgae;
 import frc.robot.commands.Groups.Climb;
 import frc.robot.commands.Groups.GroundCoralIntake;
 import frc.robot.commands.Groups.ScoreCoral;
@@ -188,7 +189,7 @@ public class RobotContainer {
 
         stow.onTrue(new Stow(m_endEffector, m_pivot, m_telescope, m_led));
 
-        clearHighAlgae.onTrue(new Climb(m_endEffector, m_pivot, m_telescope, m_led));
+        clearHighAlgae.onTrue(new ClearHighAlgae(m_endEffector, m_led, m_pivot, m_telescope));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

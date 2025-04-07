@@ -20,7 +20,7 @@ public class StationIntake extends Command{
     }
     @Override
     public boolean isFinished(){
-        if (m_debouncer.calculate(m_endEffector.getFrontBeamBreakValue() == false) || (!m_endEffector.getBackBeamBreakValue())){
+        if (!(m_endEffector.getFrontBeamBreakValue()) || (!m_endEffector.getBackBeamBreakValue())){
             return true;
         }
         return false;
